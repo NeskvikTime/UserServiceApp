@@ -1,0 +1,17 @@
+version: '3.9'
+
+volumes:
+    sqldb-data:
+  
+services:
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: database
+    environment:
+      - ACCEPT_EULA=true
+      - MSSQL_SA_PASSWORD=Pass@word
+    ports:
+      - '5444:1433'
+    volumes:
+    - sqldb-data:/var/opt/mssql
