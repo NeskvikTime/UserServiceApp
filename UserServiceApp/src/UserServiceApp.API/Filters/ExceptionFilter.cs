@@ -51,7 +51,7 @@ public class ExceptionFilter : IExceptionFilter
                     Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
                     Status = StatusCodes.Status500InternalServerError,
                     Title = "Internal server error",
-                    Detail = context.Exception.InnerException?.Message ?? context.Exception.Message
+                    Detail = context.Exception?.InnerException?.Message ?? context.Exception?.Message
                 };
                 break;
         }
