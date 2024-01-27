@@ -18,5 +18,7 @@ internal class ApplicationDbContext(DbContextOptions options) : DbContext(option
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new UserConfiguration());
+
+        modelBuilder.SeedDataToInitialMigration();
     }
 }

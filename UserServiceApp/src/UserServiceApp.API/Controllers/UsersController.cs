@@ -18,9 +18,7 @@ public class UsersController(ISender _sender) : ControllerBase
     {
         var result = await _sender.Send(query, cancellationToken);
 
-        return result.Match(
-            authResult => Ok(AuthenticationResult.MapToAuthResponse(authResult)),
-            Problem);
+        return Ok(AuthenticationResult.MapToAuthResponse(result));
     }
 
     [Authorize]
@@ -63,7 +61,7 @@ public class UsersController(ISender _sender) : ControllerBase
     {
         var request = new DeleteUserCommand(userId);
 
-        var result = await _sender.Send(request, CancellationToken.None);
+        await _sender.Send(request, CancellationToken.None);
         return NoContent();
     }
 }

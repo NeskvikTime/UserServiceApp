@@ -1,5 +1,6 @@
 using UserServiceApp.API;
 using UserServiceApp.Infrastructure;
+using UserServiceApp.Infrastructure.DbInitializer;
 
 var builder = WebApplication.CreateBuilder(args);
 {
@@ -17,6 +18,8 @@ var app = builder.Build();
         app.UseSwagger();
         app.UseSwaggerUI();
     }
+
+    app.ApplyMigrations();
 
     app.UseHttpsRedirection();
     app.UseAuthorization();

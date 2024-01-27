@@ -2,17 +2,16 @@
 using Microsoft.Extensions.DependencyInjection;
 using UserServiceApp.Application.Common.Interfaces;
 
-namespace UserServiceApp.Infrastructure.DbInitializer
+namespace UserServiceApp.Infrastructure.DbInitializer;
+
+public static class MigrationsExtension
 {
-    public static class MigrationsExtension
+    public static void ApplyMigrations(this IApplicationBuilder app)
     {
-        public static void ApplyMigrations(this IApplicationBuilder app)
-        {
-            using var scope = app.ApplicationServices.CreateScope();
+        using var scope = app.ApplicationServices.CreateScope();
 
-            var dbContext = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+        var dbContext = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
 
-            dbContext.Migrate();
-        }
+        dbContext.Migrate();
     }
 }
