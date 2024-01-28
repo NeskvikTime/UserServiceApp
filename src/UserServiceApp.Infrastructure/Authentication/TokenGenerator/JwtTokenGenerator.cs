@@ -27,9 +27,9 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             new(JwtRegisteredClaimNames.Name, user.FullName),
             new(JwtRegisteredClaimNames.Email, user.Email),
             new("id", user.Id.ToString()),
-            new("permissions", "gyms:create"),
-            new("permissions", "gyms:update"),
         };
+
+        AddRoles(user, claims);
 
         var token = new JwtSecurityToken(
             _jwtSettings.Issuer,
@@ -42,19 +42,11 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    //private static void AddIds(User user, List<Claim> claims)
-    //{
-    //    claims
-    //        .AddIfValueNotNull("adminId", user.AdminId?.ToString())
-    //        .AddIfValueNotNull("trainerId", user.TrainerId?.ToString())
-    //        .AddIfValueNotNull("participantId", user.ParticipantId?.ToString());
-    //}
-
-    //private static void AddRoles(User user, List<Claim> claims)
-    //{
-    //    user.GetProfileTypes().ForEach(type =>
-    //    {
-    //        claims.Add(new Claim("roles", type.Name));
-    //    });
-    //}
+    private static void AddRoles(User user, List<Claim> claims)
+    {
+        if (user.IsAdmin)
+        {
+            claims.Add(new Claim("roles", "admin"));
+        }
+    }
 }

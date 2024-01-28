@@ -14,13 +14,14 @@ public static class DataGenerator
             "+65467891324586",
             "English",
             "en-US",
-            "admin")
+            "Admin-1234!",
+            true)
         {
             DateCreated = dateTime,
             DateModified = dateTime,
         };
 
-        string hashedPassword = BCrypt.Net.BCrypt.HashPassword(admin.Password);
+        string hashedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(admin.Password);
         string hiddenPassword = "*******";
 
         admin.AssignPasswordAndHash(hiddenPassword, hashedPassword);

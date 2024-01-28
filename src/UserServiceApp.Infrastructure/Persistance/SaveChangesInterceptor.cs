@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using UserServiceApp.Domain.Common;
 using UserServiceApp.Domain.Common.Interfaces;
-using UserServiceApp.Infrastructure.Common;
 
 namespace UserServiceApp.Infrastructure.Persistance;
 
@@ -58,14 +57,4 @@ public class SaveChangesInterceptor(
         return ValueTask.FromResult(SavingChanges(eventData, result));
     }
 
-    private void AddDomainEventsToOfflineProcessingQueue(List<IDomainEvent> domainEvents)
-    {
-        Queue<IDomainEvent> domainEventsQueue = _httpContextAccessor.HttpContext!.Items.TryGetValue(EventualConsistencyMiddleware.DomainEventsKey, out var value) &&
-            value is Queue<IDomainEvent> existingDomainEvents
-            ? existingDomainEvents
-            : new();
-
-        domainEvents.ForEach(domainEventsQueue.Enqueue);
-        _httpContextAccessor.HttpContext.Items[EventualConsistencyMiddleware.DomainEventsKey] = domainEventsQueue;
-    }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserServiceApp.Application.Users.DeleteUser;
 using UserServiceApp.Application.Users.GetUserDatas;
+using UserServiceApp.Application.Users.Login;
 using UserServiceApp.Application.Users.RegisterUser;
 using UserServiceApp.Application.Users.UpdateUserData;
 using UserServiceApp.Contracts.Users;
@@ -13,7 +14,7 @@ namespace UserServiceApp.API.Controllers;
 [ApiController]
 public class UsersController(ISender _sender) : ControllerBase
 {
-    [HttpGet]
+    [HttpGet("Get")]
     public async Task<IActionResult> GetUserDatas([FromQuery] Guid? userId, CancellationToken cancellationToken)
     {
         var query = new GetUserDatasQuery(userId);
@@ -57,7 +58,9 @@ public class UsersController(ISender _sender) : ControllerBase
     [HttpPost("Login")]
     public async Task<IActionResult> Login(LoginRequest request)
     {
-        var result = await _sender.Send(request, CancellationToken.None);
+        var command = new LoginUserCommand(request.Email, request.Password);
+
+        var result = await _sender.Send(command, CancellationToken.None);
         return Ok(result);
     }
 

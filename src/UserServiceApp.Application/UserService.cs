@@ -29,7 +29,7 @@ internal class UserService(IUsersRepository _usersRepository,
     {
         List<User> users = new List<User>();
 
-        if (userId.HasValue)
+        if (!userId.HasValue)
         {
             users = await _usersRepository.GetAllUsersAsync(cancellationToken);
             return users;
@@ -63,7 +63,6 @@ internal class UserService(IUsersRepository _usersRepository,
         }
 
         return user;
-
     }
 
     public async Task<User> RegisterUserAsync(RegisterUserCommand command, CultureInfo culture, CancellationToken cancellationToken)

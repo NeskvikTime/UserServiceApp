@@ -78,17 +78,17 @@ namespace UserServiceApp.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4ceecbed-5e21-4de9-a758-3802d08c356f"),
-                            Culture = "en",
-                            DateCreated = new DateTime(2024, 1, 28, 12, 22, 24, 729, DateTimeKind.Utc).AddTicks(2029),
-                            DateModified = new DateTime(2024, 1, 28, 12, 22, 24, 729, DateTimeKind.Utc).AddTicks(2029),
+                            Id = new Guid("d46b0d91-bd1d-4001-a754-5c510f35d9b7"),
+                            Culture = "en-US",
+                            DateCreated = new DateTime(2024, 1, 28, 18, 5, 2, 53, DateTimeKind.Utc).AddTicks(4433),
+                            DateModified = new DateTime(2024, 1, 28, 18, 5, 2, 53, DateTimeKind.Utc).AddTicks(4433),
                             Email = "admin@localhost",
                             FullName = "Admin",
-                            IsAdmin = false,
-                            Language = "en",
+                            IsAdmin = true,
+                            Language = "English",
                             MobileNumber = "+65467891324586",
                             Password = "*******",
-                            PasswordHash = "$2a$11$kHpqmwukJRR6CHb3PsA6GeBxsmNPcpTpl7w9cEg0dd1tOc1owEOZi",
+                            PasswordHash = "$2a$11$mDnnjZbz36Z2HWW9/venvu.Smd2hQOcIsUYWmW4LGveSaT1Ao9N3W",
                             Username = "admin"
                         });
                 });

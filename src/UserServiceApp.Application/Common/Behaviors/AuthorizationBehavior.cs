@@ -26,10 +26,6 @@ public class AuthorizationBehavior<TRequest, TResponse>(ICurrentUserProvider _cu
 
         var currentUser = _currentUserProvider.GetCurrentUser();
 
-        var requiredPermissions = authorizationAttributes
-            .SelectMany(authorizationAttribute => authorizationAttribute.Permissions?.Split(',') ?? [])
-            .ToList();
-
         var requiredRoles = authorizationAttributes
             .SelectMany(authorizationAttribute => authorizationAttribute.Roles?.Split(',') ?? [])
             .ToList();
