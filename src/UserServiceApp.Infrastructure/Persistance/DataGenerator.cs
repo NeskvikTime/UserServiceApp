@@ -12,8 +12,8 @@ public static class DataGenerator
             "Admin",
             "admin@localhost",
             "+65467891324586",
-            "en",
-            "en",
+            "English",
+            "en-US",
             "admin")
         {
             DateCreated = dateTime,
