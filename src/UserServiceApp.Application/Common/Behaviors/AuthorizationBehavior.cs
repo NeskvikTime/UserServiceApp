@@ -29,11 +29,6 @@ public class AuthorizationBehavior<TRequest, TResponse>(ICurrentUserProvider _cu
             .SelectMany(authorizationAttribute => authorizationAttribute.Permissions?.Split(',') ?? [])
             .ToList();
 
-        if (requiredPermissions.Except(currentUser.Permissions).Any())
-        {
-            //return (dynamic)Error.Unauthorized(description: "User is forbidden from taking this action");
-        }
-
         var requiredRoles = authorizationAttributes
             .SelectMany(authorizationAttribute => authorizationAttribute.Roles?.Split(',') ?? [])
             .ToList();
