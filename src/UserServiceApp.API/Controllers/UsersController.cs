@@ -13,9 +13,11 @@ namespace UserServiceApp.API.Controllers;
 [ApiController]
 public class UsersController(ISender _sender) : ControllerBase
 {
-    [HttpGet("get")]
-    public async Task<IActionResult> GetUserData([FromQuery] GetUserDataQuery query, CancellationToken cancellationToken)
+    [HttpGet("get/{id:guid}")]
+    public async Task<IActionResult> GetUserData(Guid id, CancellationToken cancellationToken)
     {
+        var query = new GetUserDataQuery(id);
+
         var result = await _sender.Send(query, cancellationToken);
 
         return Ok(AuthenticationResult.MapToAuthResponse(result));

@@ -5,4 +5,4 @@ using UserServiceApp.Contracts.Common;
 namespace UserServiceApp.Application.Users.GetUserData;
 
 [Authorize(Roles = "Admin")]
-public record GetUserDataQuery() : IRequest<AuthenticationResult>;
+public record GetUserDataQuery(Guid UserId) : IRequest<AuthenticationResult>;

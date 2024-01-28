@@ -10,11 +10,16 @@ internal class UsersRepository(ApplicationDbContext _dbContext) : IUsersReposito
         await _dbContext.AddAsync(user, cancellationToken);
     }
 
+    public Task DeleteAsync(User user, CancellationToken cancellationToken)
+    {
+        _dbContext.Remove(user);
+
+        return Task.CompletedTask;
+    }
+
     public async Task<List<User>> GetAllUsersAsync(CancellationToken cancellationToken)
     {
         return await _dbContext.Users
-            .Include(u => u.Admin)
-            .AsSplitQuery()
             .ToListAsync(cancellationToken);
     }
 
@@ -22,8 +27,6 @@ internal class UsersRepository(ApplicationDbContext _dbContext) : IUsersReposito
     {
         return await _dbContext
             .Users
-            .Include(u => u.Admin)
-            .AsSplitQuery()
             .FirstOrDefaultAsync(user => user.Id == userId);
     }
 

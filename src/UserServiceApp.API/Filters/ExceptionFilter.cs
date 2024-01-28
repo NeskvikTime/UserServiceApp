@@ -35,12 +35,22 @@ public class ExceptionFilter : IExceptionFilter
                 };
                 break;
 
-            case AuthenticationError _:
+            case AuthenticationException _:
                 problemDetails = new ProblemDetails
                 {
                     Type = "https://datatracker.ietf.org/doc/html/rfc7235#section-3.1",
                     Status = StatusCodes.Status401Unauthorized,
                     Title = "Unauthorized",
+                    Detail = context.Exception.Message
+                };
+                break;
+
+            case AuthorizationException _:
+                problemDetails = new ProblemDetails
+                {
+                    Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.3",
+                    Status = StatusCodes.Status403Forbidden,
+                    Title = "Forbidden",
                     Detail = context.Exception.Message
                 };
                 break;

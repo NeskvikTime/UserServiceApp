@@ -19,18 +19,8 @@ public class ValidationBehavior<TRequest, TResponse>(IValidator<TRequest>? valid
             return await next();
         }
 
-        var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+        await _validator.ValidateAndThrowAsync(request, cancellationToken: cancellationToken);
 
-        if (validationResult.IsValid)
-        {
-            return await next();
-        }
-
-        //var errors = validationResult.Errors
-        //    .ConvertAll(error => Error.Validation(
-        //        code: error.PropertyName,
-        //        description: error.ErrorMessage));
-
-        return (dynamic)errors;
+        return await next();
     }
 }

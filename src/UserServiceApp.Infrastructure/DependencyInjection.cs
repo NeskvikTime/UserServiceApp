@@ -14,7 +14,8 @@ namespace UserServiceApp.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection RegisterInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection RegisterInfrastructureServices(this IServiceCollection services,
+        IConfiguration configuration)
     {
         var jwtSettings = new JwtSettings();
         configuration.Bind(JwtSettings.Section, jwtSettings);
