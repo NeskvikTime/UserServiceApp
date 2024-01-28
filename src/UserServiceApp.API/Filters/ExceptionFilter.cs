@@ -54,6 +54,15 @@ public class ExceptionFilter : IExceptionFilter
                     Detail = context.Exception.Message
                 };
                 break;
+            case UnauthorizedAccessException _:
+                problemDetails = new ProblemDetails
+                {
+                    Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.3",
+                    Status = StatusCodes.Status403Forbidden,
+                    Title = "Forbidden",
+                    Detail = context.Exception.Message
+                };
+                break;
 
             default:
                 problemDetails = new ProblemDetails

@@ -1,4 +1,6 @@
 ﻿using UserServiceApp.API.Filters;
+using UserServiceApp.API.Services;
+using UserServiceApp.Application.Common.Interfaces;
 
 namespace UserServiceApp.API;
 public static class DependencyInjection
@@ -14,6 +16,7 @@ public static class DependencyInjection
         services.AddSwaggerGen();
         services.AddProblemDetails();
         services.AddHttpContextAccessor();
+        services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
 
         return services;
     }

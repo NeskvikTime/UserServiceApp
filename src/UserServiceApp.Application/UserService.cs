@@ -66,7 +66,7 @@ internal class UserService(IUsersRepository _usersRepository,
 
     }
 
-    public async Task<User> RegisterUserAsync(RegisterUserCommand command, CancellationToken cancellationToken)
+    public async Task<User> RegisterUserAsync(RegisterUserCommand command, CultureInfo culture, CancellationToken cancellationToken)
     {
         string hahsedPassword = _passwordHasher.HashPassword(command.Password);
 
@@ -75,8 +75,8 @@ internal class UserService(IUsersRepository _usersRepository,
             command.FullName,
             command.Email,
             command.MobileNumber,
-            command.Culture.EnglishName,
-            command.Culture.Name,
+            culture.EnglishName,
+            culture.Name,
             hahsedPassword);
 
         await _usersRepository.AddAsync(user, cancellationToken);

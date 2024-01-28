@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using System.Globalization;
 using UserServiceApp.Contracts.Common;
 
 namespace UserServiceApp.Application.Users.RegisterUser;
@@ -9,5 +8,4 @@ public record RegisterUserCommand(
     string Email,
     string Password,
     string MobileNumber,
-    CultureInfo Culture,
     bool isAdmin = false) : IRequest<AuthenticationResult>;

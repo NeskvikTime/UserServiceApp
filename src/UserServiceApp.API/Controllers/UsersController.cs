@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using UserServiceApp.API.Helper;
 using UserServiceApp.Application.Users.DeleteUser;
 using UserServiceApp.Application.Users.GetUserDatas;
 using UserServiceApp.Application.Users.RegisterUser;
@@ -24,7 +23,6 @@ public class UsersController(ISender _sender) : ControllerBase
         return Ok(result);
     }
 
-    [Authorize]
     [HttpPut("Update")]
     public async Task<IActionResult> UpdateUserData(Guid id, [FromQuery] string newAcceptLanguageCulture, UpdateUserRequest request)
     {
@@ -41,19 +39,15 @@ public class UsersController(ISender _sender) : ControllerBase
         return Ok(result);
     }
 
-    [Authorize]
     [HttpPost("Create")]
     public async Task<IActionResult> RegisterUser(RegisterUserRequest request)
     {
-        var culture = Request.HttpContext.GetCultureFromRequest();
-
         var command = new RegisterUserCommand(
             request.UserName,
             request.FullName,
             request.Email,
             request.Password,
-            request.MobileNumber,
-            culture);
+            request.MobileNumber);
 
         var result = await _sender.Send(command, CancellationToken.None);
         return Ok(result);
@@ -67,7 +61,6 @@ public class UsersController(ISender _sender) : ControllerBase
         return Ok(result);
     }
 
-    [Authorize]
     [HttpDelete("Delete/{userId:guid}")]
     public async Task<IActionResult> DeleteUser(Guid userId)
     {
