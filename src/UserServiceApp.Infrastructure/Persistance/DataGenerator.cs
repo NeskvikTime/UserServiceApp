@@ -6,10 +6,18 @@ public static class DataGenerator
 {
     public static ModelBuilder SeedDataToInitialMigration(this ModelBuilder modelBuilder)
     {
-        var admin = new User("admin", "Admin", "admin@localhost", null!, "en", "en", "admin")
+        DateTime dateTime = DateTime.UtcNow;
+
+        var admin = new User("admin",
+            "Admin",
+            "admin@localhost",
+            null!,
+            "en",
+            "en",
+            "admin")
         {
-            DateCreated = DateTime.UtcNow,
-            DateModified = DateTime.UtcNow,
+            DateCreated = dateTime,
+            DateModified = dateTime,
         };
 
         string hashedPassword = BCrypt.Net.BCrypt.HashPassword(admin.Password);

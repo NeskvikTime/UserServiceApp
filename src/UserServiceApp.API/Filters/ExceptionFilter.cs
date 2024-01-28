@@ -25,7 +25,7 @@ public class ExceptionFilter : IExceptionFilter
                 };
                 break;
 
-            case KeyNotFoundException _:
+            case NotFoundException _:
                 problemDetails = new ProblemDetails
                 {
                     Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4",

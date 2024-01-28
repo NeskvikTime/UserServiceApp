@@ -5,6 +5,11 @@ using UserServiceApp.Domain.UsersAggregate;
 namespace UserServiceApp.Infrastructure.Persistance.Repositories;
 internal class UsersRepository(ApplicationDbContext _dbContext) : IUsersRepository
 {
+    public async Task AddAsync(User user, CancellationToken cancellationToken)
+    {
+        await _dbContext.AddAsync(user, cancellationToken);
+    }
+
     public async Task AddUserAsync(User user, CancellationToken cancellationToken)
     {
         await _dbContext.AddAsync(user, cancellationToken);

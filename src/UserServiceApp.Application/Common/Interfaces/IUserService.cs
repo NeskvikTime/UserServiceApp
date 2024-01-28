@@ -1,12 +1,17 @@
-﻿using UserServiceApp.Contracts.Common;
+﻿using UserServiceApp.Application.Users.RegisterUser;
+using UserServiceApp.Application.Users.UpdateUserData;
 using UserServiceApp.Domain.UsersAggregate;
 
 namespace UserServiceApp.Application.Common.Interfaces;
 public interface IUserService
 {
-    Task DeleteUeserAsync(Guid userId, CancellationToken cancellationToken);
+    Task DeleteUserAsync(Guid userId, CancellationToken cancellationToken);
 
-    Task<List<User>> GetAllUserDatasAsync(CancellationToken cancellationToken);
+    Task<List<User>> GetUserDatasAsync(Guid? userId, CancellationToken cancellationToken);
 
-    Task<AuthenticationResult> LoginUserAsync(string email, string password, CancellationToken cancellationToken);
+    Task<User> LoginUserAsync(string email, string password, CancellationToken cancellationToken);
+
+    Task<User> RegisterUserAsync(RegisterUserCommand request, CancellationToken cancellationToken);
+
+    Task<User> UpdateUserAsync(UpdateUserCommand request, CancellationToken cancellationToken);
 }

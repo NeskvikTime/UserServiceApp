@@ -39,18 +39,6 @@ public class SaveChangesInterceptor(
             }
         }
 
-        var domainEvents = _context.ChangeTracker.Entries<AggregateRoot>()
-           .Select(entry => entry.Entity.PopDomainEvents())
-           .SelectMany(x => x)
-           .ToList();
-
-        if (IsUserWaitingOnline())
-        {
-            AddDomainEventsToOfflineProcessingQueue(domainEvents);
-        }
-
-        ValueTask.FromResult(PublishDomainEvents(domainEvents));
-
         return result;
     }
 

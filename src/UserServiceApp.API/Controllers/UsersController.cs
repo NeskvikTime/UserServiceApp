@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UserServiceApp.API.Helper;
 using UserServiceApp.Application.Users.DeleteUser;
 using UserServiceApp.Application.Users.GetUserDatas;
+using UserServiceApp.Application.Users.RegisterUser;
 using UserServiceApp.Application.Users.UpdateUserData;
 using UserServiceApp.Contracts.Users;
 
@@ -13,9 +15,9 @@ namespace UserServiceApp.API.Controllers;
 public class UsersController(ISender _sender) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetAllUserDatas(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetUserDatas([FromQuery] Guid? userId, CancellationToken cancellationToken)
     {
-        var query = new GetAllUserDatasQuery();
+        var query = new GetUserDatasQuery(userId);
 
         var result = await _sender.Send(query, cancellationToken);
 
@@ -23,8 +25,8 @@ public class UsersController(ISender _sender) : ControllerBase
     }
 
     [Authorize]
-    [HttpPut("update")]
-    public async Task<IActionResult> UpdateUserData(Guid id, UpdateUserRequest request)
+    [HttpPut("Update")]
+    public async Task<IActionResult> UpdateUserData(Guid id, [FromQuery] string newAcceptLanguageCulture, UpdateUserRequest request)
     {
         var command = new UpdateUserCommand(
             id,
@@ -32,8 +34,7 @@ public class UsersController(ISender _sender) : ControllerBase
             request.FullName,
             request.Email,
             request.MobileNumber,
-            request.Language,
-            request.Culture,
+            newAcceptLanguageCulture,
             request.isAdmin);
 
         var result = await _sender.Send(command, CancellationToken.None);
@@ -41,15 +42,25 @@ public class UsersController(ISender _sender) : ControllerBase
     }
 
     [Authorize]
-    [HttpPost("create")]
+    [HttpPost("Create")]
     public async Task<IActionResult> RegisterUser(RegisterUserRequest request)
     {
-        var result = await _sender.Send(request, CancellationToken.None);
+        var culture = Request.HttpContext.GetCultureFromRequest();
+
+        var command = new RegisterUserCommand(
+            request.UserName,
+            request.FullName,
+            request.Email,
+            request.Password,
+            request.MobileNumber,
+            culture);
+
+        var result = await _sender.Send(command, CancellationToken.None);
         return Ok(result);
     }
 
     [AllowAnonymous]
-    [HttpPost("login")]
+    [HttpPost("Login")]
     public async Task<IActionResult> Login(LoginRequest request)
     {
         var result = await _sender.Send(request, CancellationToken.None);
@@ -57,7 +68,7 @@ public class UsersController(ISender _sender) : ControllerBase
     }
 
     [Authorize]
-    [HttpDelete("delete/{userId:guid}")]
+    [HttpDelete("Delete/{userId:guid}")]
     public async Task<IActionResult> DeleteUser(Guid userId)
     {
         var request = new DeleteUserCommand(userId);

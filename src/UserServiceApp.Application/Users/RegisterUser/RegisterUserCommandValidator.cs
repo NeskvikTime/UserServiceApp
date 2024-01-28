@@ -22,11 +22,6 @@ public class RegisterUserCommandValidator : AbstractValidator<RegisterUserComman
             .Matches(@"^\+[1-9]\d{1,14}$")
             .WithMessage(errorMessage: "Mobile number must be in international format. Example: +40721234567");
 
-        RuleFor(x => x.Language)
-            .NotEmpty()
-            .Matches(@"^[a-z]{2}-[A-Z]{2}$")
-            .WithMessage(errorMessage: "Language must be in format: en-US");
-
         RuleFor(x => x.Password)
             .NotEmpty()
             .Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
