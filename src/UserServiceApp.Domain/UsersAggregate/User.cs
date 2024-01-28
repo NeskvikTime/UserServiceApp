@@ -20,7 +20,7 @@ public class User : AggregateRoot
 
     public string? PasswordHash { get; set; } = default!;
 
-    public Guid? AdminId { get; }
+    public bool IsAdmin { get; }
 
     public User(string userName,
         string fullName,
@@ -28,7 +28,8 @@ public class User : AggregateRoot
         string mobileNumber,
         string language,
         string culture,
-        string password)
+        string password,
+        bool isAdmin = false)
     {
         FullName = fullName;
         Username = userName;
@@ -37,9 +38,8 @@ public class User : AggregateRoot
         Language = language;
         Culture = culture;
         Password = password;
+        IsAdmin = isAdmin;
     }
-
-    public virtual Admin? Admin { get; }
 
     public bool IsCorrectPasswordHash(string password, IPasswordHasher passwordHasher)
     {

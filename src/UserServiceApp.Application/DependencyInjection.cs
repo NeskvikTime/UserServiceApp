@@ -6,7 +6,7 @@ using UserServiceApp.Application.Common.Behaviors;
 namespace UserServiceApp.Application;
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    public static IServiceCollection RegisterApplicationServices(this IServiceCollection services)
     {
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
         services.AddMediatR(options =>

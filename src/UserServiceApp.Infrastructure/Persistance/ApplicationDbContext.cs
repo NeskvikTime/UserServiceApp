@@ -8,8 +8,6 @@ internal class ApplicationDbContext(DbContextOptions options) : DbContext(option
 {
     public DbSet<User> Users => Set<User>();
 
-    public DbSet<Admin> Admins => Set<Admin>();
-
     public void Migrate()
     {
         base.Database.Migrate();
