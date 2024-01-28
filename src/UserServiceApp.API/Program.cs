@@ -6,26 +6,28 @@ using UserServiceApp.Infrastructure.DbInitializer;
 
 var builder = WebApplication.CreateBuilder(args);
 {
-    builder.Services.RegisterApiServices()
-        .RegisterApplicationServices()
-        .RegisterInfrastructureServices(builder.Configuration);
-
     // Serilog configuration
     builder.Host.UseSerilog((context, loggerConfig) => loggerConfig
         .WriteTo.Console()
         .ReadFrom.Configuration(context.Configuration));
+
+
+    builder.Services.RegisterApiServices()
+        .RegisterApplicationServices()
+        .RegisterInfrastructureServices(builder.Configuration);
 }
 
 var app = builder.Build();
 {
     app.UseExceptionHandler();
-    app.UseSerilogRequestLogging();
 
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
         app.UseSwaggerUI();
     }
+
+    app.UseSerilogRequestLogging();
 
     app.ApplyMigrations();
 
