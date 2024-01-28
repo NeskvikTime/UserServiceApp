@@ -1,26 +1,25 @@
 using UserServiceApp.Contracts.Users;
-using UserServiceApp.Domain.UsersAggregate;
 
 namespace UserServiceApp.Contracts.Common;
 
 public record AuthenticationResult
 {
-    public AuthenticationResult(User user, string token)
+    public AuthenticationResult(UserResponse userResponse, string token)
     {
-        User = user;
+        UserResponse = userResponse;
         Token = token;
     }
 
-    public User User { get; set; }
+    public UserResponse UserResponse { get; set; }
 
     public string Token { get; set; }
 
     public static AuthenticationResponse MapToAuthResponse(AuthenticationResult authResult)
     {
         return new AuthenticationResponse(
-            authResult.User.Id,
-            authResult.User.FullName,
-            authResult.User.Email,
+            authResult.UserResponse.Id,
+            authResult.UserResponse.FullName,
+            authResult.UserResponse.Email,
             authResult.Token);
     }
 }

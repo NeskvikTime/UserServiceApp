@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UserServiceApp.Application.Users.DeleteUser;
-using UserServiceApp.Application.Users.GetUserData;
+using UserServiceApp.Application.Users.GetUserDatas;
 using UserServiceApp.Application.Users.UpdateUserData;
-using UserServiceApp.Contracts.Common;
 using UserServiceApp.Contracts.Users;
 
 namespace UserServiceApp.API.Controllers;
@@ -13,14 +12,14 @@ namespace UserServiceApp.API.Controllers;
 [ApiController]
 public class UsersController(ISender _sender) : ControllerBase
 {
-    [HttpGet("get/{id:guid}")]
-    public async Task<IActionResult> GetUserData(Guid id, CancellationToken cancellationToken)
+    [HttpGet]
+    public async Task<IActionResult> GetAllUserDatas(CancellationToken cancellationToken)
     {
-        var query = new GetUserDataQuery(id);
+        var query = new GetAllUserDatasQuery();
 
         var result = await _sender.Send(query, cancellationToken);
 
-        return Ok(AuthenticationResult.MapToAuthResponse(result));
+        return Ok(result);
     }
 
     [Authorize]

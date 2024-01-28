@@ -25,9 +25,14 @@ internal class UsersRepository(ApplicationDbContext _dbContext) : IUsersReposito
 
     public async Task<User?> GetByIdAsync(Guid userId, CancellationToken cancellationToken)
     {
-        return await _dbContext
-            .Users
-            .FirstOrDefaultAsync(user => user.Id == userId);
+        return await _dbContext.Users
+            .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+    }
+
+    public async Task<User?> GetUserByEmailAsync(string email, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Users
+            .FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
     }
 
     public Task UpdateAsync(User user, CancellationToken cancellationToken)

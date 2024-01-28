@@ -16,9 +16,9 @@ public class User : AggregateRoot
 
     public string Culture { get; } = default!;
 
-    public string Password { get; set; } = default!;
+    public string Password { get; private set; } = default!;
 
-    public string? PasswordHash { get; set; } = default!;
+    public string PasswordHash { get; private set; } = default!;
 
     public bool IsAdmin { get; }
 
@@ -41,9 +41,15 @@ public class User : AggregateRoot
         IsAdmin = isAdmin;
     }
 
-    public bool IsCorrectPasswordHash(string password, IPasswordHasher passwordHasher)
+    public bool CheckPasswordAsync(string password, IPasswordHasher passwordHasher)
     {
         return passwordHasher.IsCorrectPassword(password, PasswordHash);
+    }
+
+    public void AssignPasswordAndHash(string password, string hash)
+    {
+        Password = password;
+        PasswordHash = hash;
     }
 
     protected User() { }
