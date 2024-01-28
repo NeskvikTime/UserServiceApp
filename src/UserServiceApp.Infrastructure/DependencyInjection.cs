@@ -25,6 +25,8 @@ public static class DependencyInjection
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
         services.AddScoped<IDateTimeProvider, SystemDateTimeProvider>();
 
+        services.AddScoped<SaveChangesInterceptor>();
+
         services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
         {
             options.UseSqlServer(configuration.GetConnectionString("MyDbContext"))
@@ -32,6 +34,7 @@ public static class DependencyInjection
         });
 
         services.AddScoped<IDbInitializer, ApplicationDbContext>();
+        services.AddScoped<IUsersRepository, UsersRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;

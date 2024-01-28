@@ -11,7 +11,7 @@ public static class DataGenerator
         var admin = new User("admin",
             "Admin",
             "admin@localhost",
-            null!,
+            "+65467891324586",
             "en",
             "en",
             "admin")

@@ -29,7 +29,8 @@ public class User : AggregateRoot
         string language,
         string culture,
         string password,
-        bool isAdmin = false)
+        bool isAdmin = false,
+        Guid? id = null) : base(id ?? Guid.NewGuid())
     {
         FullName = fullName;
         Username = userName;
