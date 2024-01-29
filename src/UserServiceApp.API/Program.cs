@@ -14,7 +14,6 @@ var builder = WebApplication.CreateBuilder(args);
     // Serilog configuration
     builder.Host.UseSerilog((context, configuration) =>
     {
-        configuration.WriteTo.Console();
         configuration.ReadFrom.Configuration(context.Configuration);
     });
 }
