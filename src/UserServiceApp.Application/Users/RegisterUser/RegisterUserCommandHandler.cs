@@ -1,25 +1,19 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using System.Globalization;
 using UserServiceApp.Application.Common.Interfaces;
+using UserServiceApp.Application.Helper;
 using UserServiceApp.Contracts.Common;
 using UserServiceApp.Contracts.Users;
 using UserServiceApp.Domain.UsersAggregate;
 
 namespace UserServiceApp.Application.Users.RegisterUser;
-
-public class RegisterUserCommandHandler(IUserService _userService,
-    ICurrentUserProvider _currentUserProvider,
-    IJwtTokenGenerator _jwtTokenGenerator)
-        : IRequestHandler<RegisterUserCommand, AuthenticationResult>
+public class RegisterUserCommandHandler(IHttpContextAccessor _httpContextAccesor, IUserService _userService, IJwtTokenGenerator _jwtTokenGenerator)
+    : IRequestHandler<RegisterUserCommand, AuthenticationResult>
 {
     public async Task<AuthenticationResult> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
-        CultureInfo? culture = _currentUserProvider.UserCulture;
-
-        if (culture is null)
-        {
-            throw new CultureNotFoundException("Can not read culture from the request.");
-        }
+        CultureInfo culture = _httpContextAccesor.GetCultureFromRequest();
 
         User user = await _userService.RegisterUserAsync(request, culture, cancellationToken);
 
@@ -37,4 +31,5 @@ public class RegisterUserCommandHandler(IUserService _userService,
 
         return new AuthenticationResult(userResponse, token);
     }
+
 }

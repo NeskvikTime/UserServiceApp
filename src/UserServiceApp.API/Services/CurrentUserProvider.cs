@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Security.Claims;
 using UserServiceApp.Application.Common.Interfaces;
 using UserServiceApp.Application.Common.Models;
@@ -6,17 +5,13 @@ using UserServiceApp.Domain.Exceptions;
 
 namespace UserServiceApp.API.Services;
 
-public class CurrentUserProvider : ICurrentUserProvider
+public class CurrentUserProvider(IHttpContextAccessor _httpContextAccessor) : ICurrentUserProvider
 {
-    public CultureInfo? UserCulture { get; set; } = null!;
-
-    public ClaimsPrincipal? UserClaims { get; set; } = null!;
-
     public CurrentUser GetCurrentUser()
     {
-        if (UserClaims is null)
+        if (_httpContextAccessor.HttpContext is null)
         {
-            throw new AuthorizationException("Can not read user claims from the request.");
+            throw new ArgumentNullException(nameof(HttpContext));
         }
 
         IReadOnlyList<string> claims = GetClaimValues("id");
@@ -45,7 +40,7 @@ public class CurrentUserProvider : ICurrentUserProvider
 
     private IReadOnlyList<string> GetClaimValues(string claimType)
     {
-        var claims = UserClaims?.Claims?
+        var claims = _httpContextAccessor.HttpContext!.User?.Claims?
             .Where(claim => claim.Type == claimType)
             .Select(claim => claim.Value)
             .ToList() ?? [];

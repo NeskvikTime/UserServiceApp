@@ -1,16 +1,14 @@
-﻿using Microsoft.Extensions.Primitives;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Primitives;
 using System.Globalization;
 
-namespace UserServiceApp.API.Helper;
+namespace UserServiceApp.Application.Helper;
 
 public static class CultureHelper
 {
-    public static CultureInfo GetCultureFromRequest(this HttpRequest request)
+    public static CultureInfo GetCultureFromRequest(this IHttpContextAccessor accesor)
     {
-        if (!request.Headers.TryGetValue("Accept-Language", out StringValues stringValues))
-        {
-            throw new CultureNotFoundException("Can not read culture from the request.");
-        }
+        var cultures = accesor.HttpContext.Request.Headers.TryGetValue("Accept-Language", out StringValues stringValues);
 
         string? culture = stringValues.FirstOrDefault();
 

@@ -20,7 +20,6 @@ var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 {
     app.UseExceptionHandler();
-    app.AddApiMiddleware();
 
     if (app.Environment.IsDevelopment())
     {
