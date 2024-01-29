@@ -19,7 +19,6 @@ public static class DependencyInjection
         });
 
         services.AddTransient<IUserService, UserService>();
-
         services.AddValidatorsFromAssemblyContaining(typeof(DependencyInjection));
 
         return services;
