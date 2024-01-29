@@ -18,7 +18,7 @@ public static class DependencyInjection
             options.AddOpenBehavior(typeof(AuthorizationBehavior<,>));
         });
 
-        services.AddTransient<IUserService, UserService>();
+        services.AddScoped<IUserService, UserService>();
 
         services.AddValidatorsFromAssemblyContaining(typeof(DependencyInjection));
 

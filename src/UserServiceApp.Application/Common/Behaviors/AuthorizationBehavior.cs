@@ -30,7 +30,10 @@ public class AuthorizationBehavior<TRequest, TResponse>(ICurrentUserProvider _cu
             .SelectMany(authorizationAttribute => authorizationAttribute.Roles?.Split(',') ?? [])
             .ToList();
 
-        if (requiredRoles.Except(currentUser.Roles).Any())
+        bool isAuthorized = currentUser.Roles
+            .Any(role => requiredRoles.Any(reqRole => string.Equals(role, reqRole, StringComparison.OrdinalIgnoreCase)));
+
+        if (!isAuthorized)
         {
             throw new AuthorizationException($"User is forbidden from taking this action.");
         }
