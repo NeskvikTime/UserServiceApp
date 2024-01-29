@@ -56,7 +56,7 @@ internal class UsersRepository(ApplicationDbContext _dbContext) : IUsersReposito
 
     public async Task<bool> UsernameIsUniqueAsync(Guid id, string name, CancellationToken cancellationToken)
     {
-        return await _dbContext.Users
+        return !await _dbContext.Users
             .Where(u => u.Id != id)
             .AsNoTracking()
             .AnyAsync(u => u.Username == name, cancellationToken);

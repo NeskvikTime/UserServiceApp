@@ -47,6 +47,10 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         if (user.IsAdmin)
         {
             claims.Add(new Claim("roles", "Admin"));
+            return;
         }
+
+        // User is not admin, so add the user role
+        claims.Add(new Claim("roles", "User"));
     }
 }

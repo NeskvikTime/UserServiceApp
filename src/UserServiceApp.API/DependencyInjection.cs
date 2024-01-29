@@ -11,6 +11,7 @@ public static class DependencyInjection
         services.AddControllers(cfg =>
         {
             cfg.Filters.Add(typeof(ExceptionFilter));
+            cfg.Filters.Add<LogActionParametersFilter>();
         });
 
         services.AddEndpointsApiExplorer();

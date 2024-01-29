@@ -34,7 +34,8 @@ public class UsersController(ISender _sender) : ControllerBase
             request.Email,
             request.MobileNumber,
             newAcceptLanguageCulture,
-            request.isAdmin);
+            request.isAdmin,
+            request.NewPassword);
 
         var result = await _sender.Send(command, CancellationToken.None);
         return Ok(result);

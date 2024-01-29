@@ -14,9 +14,14 @@ public class CurrentUserProvider(IHttpContextAccessor _httpContextAccessor) : IC
             throw new ArgumentNullException(nameof(HttpContext));
         }
 
-        var id = GetClaimValues("id")
-            .Select(Guid.Parse)
-            .First();
+        IReadOnlyList<string> claimValues = GetClaimValues("id");
+
+        if (claimValues.Count == 0)
+        {
+            throw new AuthorizationException("User does not have an id assigned to token.");
+        }
+
+        string id = claimValues.First();
 
         var roles = GetClaimValues(ClaimTypes.Role);
 
@@ -25,13 +30,13 @@ public class CurrentUserProvider(IHttpContextAccessor _httpContextAccessor) : IC
             throw new AuthorizationException("User does not have any roles.");
         }
 
-        return new CurrentUser(id, roles);
+        return new CurrentUser(Guid.Parse(id), roles);
     }
 
     private IReadOnlyList<string> GetClaimValues(string claimType)
     {
         var claims = _httpContextAccessor.HttpContext!.User?.Claims?
-            .Where(claim => claim.Type.ToLower() == claimType.ToLower())
+            .Where(claim => string.Equals(claim.Type, claimType, StringComparison.OrdinalIgnoreCase))
             .Select(claim => claim.Value)
             .ToList() ?? [];
 
