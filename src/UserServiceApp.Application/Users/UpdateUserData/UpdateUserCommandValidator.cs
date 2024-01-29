@@ -1,21 +1,42 @@
 ﻿using FluentValidation;
+using UserServiceApp.Application.Common.Interfaces;
 
 namespace UserServiceApp.Application.Users.UpdateUserData;
 public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
 {
-    public UpdateUserCommandValidator()
+    private IUsersRepository _usersRepository;
+
+    public UpdateUserCommandValidator(IUsersRepository usersRepository)
     {
-        RuleFor(x => x.UserId).NotEmpty();
+        _usersRepository = usersRepository;
+
+        RuleFor(x => x.UserId)
+            .NotEmpty();
 
         RuleFor(x => x.UserName)
-            .NotEmpty();
+            .NotEmpty()
+            .MaximumLength(20)
+            .MustAsync(async (command, username, cancellationToken) =>
+            {
+                var usernameIsUnique = await _usersRepository.UsernameIsUniqueAsync(command.UserId, username, cancellationToken);
+
+                return usernameIsUnique;
+            })
+            .WithMessage(errorMessage: "Username already exists");
 
         RuleFor(x => x.FullName)
             .NotEmpty();
 
         RuleFor(x => x.Email)
             .NotEmpty()
-            .EmailAddress();
+            .EmailAddress()
+            .MustAsync(async (command, email, cancellationToken) =>
+            {
+                var emailIsUnique = await _usersRepository.EmailIsUniqueAsync(command.UserId, email, cancellationToken);
+
+                return emailIsUnique;
+            })
+            .WithMessage(errorMessage: "Email already exists");
 
         RuleFor(x => x.NewPassword)
             .NotEmpty()

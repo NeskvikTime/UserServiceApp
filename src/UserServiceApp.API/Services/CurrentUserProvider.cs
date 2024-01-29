@@ -14,7 +14,7 @@ public class CurrentUserProvider(IHttpContextAccessor _httpContextAccessor) : IC
             throw new ArgumentNullException(nameof(HttpContext));
         }
 
-        var id = GetClaimValues("Id")
+        var id = GetClaimValues("id")
             .Select(Guid.Parse)
             .First();
 
@@ -31,7 +31,7 @@ public class CurrentUserProvider(IHttpContextAccessor _httpContextAccessor) : IC
     private IReadOnlyList<string> GetClaimValues(string claimType)
     {
         var claims = _httpContextAccessor.HttpContext!.User?.Claims?
-            .Where(claim => claim.Type == claimType)
+            .Where(claim => claim.Type.ToLower() == claimType.ToLower())
             .Select(claim => claim.Value)
             .ToList() ?? [];
 

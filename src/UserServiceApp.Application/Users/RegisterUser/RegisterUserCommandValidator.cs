@@ -1,13 +1,25 @@
 ﻿using FluentValidation;
+using UserServiceApp.Application.Common.Interfaces;
 
 namespace UserServiceApp.Application.Users.RegisterUser;
 public class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
 {
-    public RegisterUserCommandValidator()
+    private readonly IUsersRepository _usersRepository;
+
+    public RegisterUserCommandValidator(IUsersRepository usersRepository)
     {
+        _usersRepository = usersRepository;
+
         RuleFor(x => x.UserName)
             .NotEmpty()
-            .MaximumLength(20);
+            .MaximumLength(20)
+            .MustAsync(async (username, cancellationToken) =>
+            {
+                var usernameIsUnique = await _usersRepository.UsernameIsUniqueAsync(username, cancellationToken);
+
+                return usernameIsUnique;
+            })
+            .WithMessage(errorMessage: "Username already exists");
 
         RuleFor(x => x.FullName)
             .NotEmpty()
@@ -15,7 +27,14 @@ public class RegisterUserCommandValidator : AbstractValidator<RegisterUserComman
 
         RuleFor(x => x.Email)
             .NotEmpty()
-            .EmailAddress();
+            .EmailAddress()
+            .MustAsync(async (email, cancellationToken) =>
+            {
+                var emailIsUnique = await _usersRepository.EmailIsUniqueAsync(email, cancellationToken);
+
+                return emailIsUnique;
+            })
+            .WithMessage(errorMessage: "Email already exists");
 
         RuleFor(x => x.MobileNumber)
             .NotEmpty()

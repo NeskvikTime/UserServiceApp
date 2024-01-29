@@ -46,4 +46,34 @@ internal class UsersRepository(ApplicationDbContext _dbContext) : IUsersReposito
 
         return Task.CompletedTask;
     }
+
+    public async Task<bool> UsernameIsUniqueAsync(string name, CancellationToken cancellationToken)
+    {
+        return !await _dbContext.Users
+            .AsNoTracking()
+            .AnyAsync(u => u.Username == name, cancellationToken);
+    }
+
+    public async Task<bool> UsernameIsUniqueAsync(Guid id, string name, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Users
+            .Where(u => u.Id != id)
+            .AsNoTracking()
+            .AnyAsync(u => u.Username == name, cancellationToken);
+    }
+
+    public async Task<bool> EmailIsUniqueAsync(string email, CancellationToken cancellationToken)
+    {
+        return !await _dbContext.Users
+            .AsNoTracking()
+            .AnyAsync(u => u.Email == email, cancellationToken);
+    }
+
+    public async Task<bool> EmailIsUniqueAsync(Guid id, string email, CancellationToken cancellationToken)
+    {
+        return !await _dbContext.Users
+            .Where(u => u.Id != id)
+            .AsNoTracking()
+            .AnyAsync(u => u.Email == email, cancellationToken);
+    }
 }

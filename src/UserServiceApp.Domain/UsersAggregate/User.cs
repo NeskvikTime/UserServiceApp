@@ -28,7 +28,7 @@ public class User : AggregateRoot
         string mobileNumber,
         string language,
         string culture,
-        string password,
+        string passwordHash,
         bool isAdmin = false,
         Guid? id = null) : base(id ?? Guid.NewGuid())
     {
@@ -38,7 +38,8 @@ public class User : AggregateRoot
         MobileNumber = mobileNumber;
         Language = language;
         Culture = culture;
-        Password = password;
+        PasswordHash = passwordHash;
+        Password = "*****************";
         IsAdmin = isAdmin;
     }
 
