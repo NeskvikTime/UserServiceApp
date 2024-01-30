@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using UserServiceApp.Application.Common.Interfaces;
+using UserServiceApp.Contracts.Common.Interfaces;
 using UserServiceApp.Domain.Common.Interfaces;
 using UserServiceApp.Infrastructure.Authentication.TokenGenerator;
 using UserServiceApp.Infrastructure.Persistance;

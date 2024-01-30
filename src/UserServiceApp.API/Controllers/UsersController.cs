@@ -15,7 +15,17 @@ namespace UserServiceApp.API.Controllers;
 public class UsersController(ISender _sender) : ControllerBase
 {
     [HttpGet("Get")]
-    public async Task<IActionResult> GetUserDatas([FromQuery] Guid? userId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetUserData(CancellationToken cancellationToken)
+    {
+        var query = new GetUserDatasQuery(null);
+
+        var result = await _sender.Send(query, cancellationToken);
+
+        return Ok(result);
+    }
+
+    [HttpGet("Get/{userId:guid}")]
+    public async Task<IActionResult> GetUserDatas([FromRoute] Guid userId, CancellationToken cancellationToken)
     {
         var query = new GetUserDatasQuery(userId);
 
@@ -24,11 +34,11 @@ public class UsersController(ISender _sender) : ControllerBase
         return Ok(result);
     }
 
-    [HttpPut("Update")]
-    public async Task<IActionResult> UpdateUserData(Guid id, [FromQuery] string newAcceptLanguageCulture, UpdateUserRequest request)
+    [HttpPut("Update/{userId:guid}")]
+    public async Task<IActionResult> UpdateUserData([FromRoute] Guid userId, [FromQuery] string newAcceptLanguageCulture, UpdateUserRequest request)
     {
         var command = new UpdateUserCommand(
-            id,
+            userId,
             request.UserName,
             request.FullName,
             request.Email,

@@ -22,7 +22,7 @@ public static class DataGenerator
         };
 
         string hashedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(admin.Password);
-        string hiddenPassword = "*******";
+        string hiddenPassword = "************";
 
         admin.AssignPasswordAndHash(hiddenPassword, hashedPassword);
 

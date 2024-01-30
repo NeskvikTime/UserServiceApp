@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using UserServiceApp.Contracts.Common.Interfaces;
 using UserServiceApp.Domain.Common;
-using UserServiceApp.Domain.Common.Interfaces;
 
 namespace UserServiceApp.Infrastructure.Persistance;
 

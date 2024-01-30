@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using UserServiceApp.Application.Common.Interfaces;
 
-namespace UserServiceApp.Infrastructure.Persistance.Repositories;
+namespace UserServiceApp.Infrastructure.Persistance;
 internal class UnitOfWork : IUnitOfWork
 {
     private readonly ApplicationDbContext _dbContext;

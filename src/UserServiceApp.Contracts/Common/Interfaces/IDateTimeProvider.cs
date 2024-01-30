@@ -1,4 +1,4 @@
-namespace UserServiceApp.Domain.Common.Interfaces;
+namespace UserServiceApp.Contracts.Common.Interfaces;
 
 public interface IDateTimeProvider
 {

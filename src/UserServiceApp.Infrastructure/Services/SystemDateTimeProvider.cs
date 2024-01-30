@@ -1,4 +1,4 @@
-using UserServiceApp.Domain.Common.Interfaces;
+using UserServiceApp.Contracts.Common.Interfaces;
 
 namespace UserServiceApp.Infrastructure.Services;
 
