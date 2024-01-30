@@ -10,7 +10,7 @@ using UserServiceApp.Contracts.Users;
 
 namespace UserServiceApp.API.Controllers;
 
-[Route("[controller]")]
+[Route("v1/[controller]")]
 [ApiController]
 public class UsersController(ISender _sender) : ControllerBase
 {
