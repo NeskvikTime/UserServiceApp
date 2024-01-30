@@ -3,17 +3,12 @@ using UserServiceApp.Application.Common.Interfaces;
 using UserServiceApp.Application.Common.Models;
 using UserServiceApp.Domain.Exceptions;
 
-namespace UserServiceApp.API.Services;
+namespace UserServiceApp.Application.Services;
 
-public class CurrentUserProvider(IHttpContextAccessor _httpContextAccessor) : ICurrentUserProvider
+public class CurrentUserProvider(UserPreferences _userPreferences) : ICurrentUserProvider
 {
     public CurrentUser GetCurrentUser()
     {
-        if (_httpContextAccessor.HttpContext is null)
-        {
-            throw new ArgumentNullException(nameof(HttpContext));
-        }
-
         IReadOnlyList<string> claimValues = GetClaimValues("id");
 
         if (claimValues.Count == 0)
@@ -35,7 +30,7 @@ public class CurrentUserProvider(IHttpContextAccessor _httpContextAccessor) : IC
 
     private IReadOnlyList<string> GetClaimValues(string claimType)
     {
-        var claims = _httpContextAccessor.HttpContext!.User?.Claims?
+        var claims = _userPreferences.UserClaims?
             .Where(claim => string.Equals(claim.Type, claimType, StringComparison.OrdinalIgnoreCase))
             .Select(claim => claim.Value)
             .ToList() ?? [];

@@ -6,9 +6,10 @@ using UserServiceApp.Domain.Common.Interfaces;
 using UserServiceApp.Domain.Exceptions;
 using UserServiceApp.Domain.UsersAggregate;
 
-namespace UserServiceApp.Application;
+namespace UserServiceApp.Application.Services;
 
 internal class UserService(IUsersRepository _usersRepository,
+    UserPreferences _userPreferences,
     IUnitOfWork _unitOfWork,
     IPasswordHasher _passwordHasher) : IUserService
 {
@@ -65,7 +66,7 @@ internal class UserService(IUsersRepository _usersRepository,
         return user;
     }
 
-    public async Task<User> RegisterUserAsync(RegisterUserCommand command, CultureInfo culture, CancellationToken cancellationToken)
+    public async Task<User> RegisterUserAsync(RegisterUserCommand command, CancellationToken cancellationToken)
     {
         string hahsedPassword = _passwordHasher.HashPassword(command.Password);
 
@@ -74,8 +75,8 @@ internal class UserService(IUsersRepository _usersRepository,
             command.FullName,
             command.Email,
             command.MobileNumber,
-            culture.EnglishName,
-            culture.Name,
+            _userPreferences.UserCulture,
+            _userPreferences.UserLanguage,
             hahsedPassword);
 
         await _usersRepository.AddAsync(user, cancellationToken);

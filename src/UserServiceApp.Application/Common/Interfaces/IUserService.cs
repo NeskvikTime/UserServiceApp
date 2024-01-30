@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using UserServiceApp.Application.Users.RegisterUser;
+﻿using UserServiceApp.Application.Users.RegisterUser;
 using UserServiceApp.Application.Users.UpdateUserData;
 using UserServiceApp.Domain.UsersAggregate;
 
@@ -12,7 +11,7 @@ public interface IUserService
 
     Task<User> LoginUserAsync(string email, string password, CancellationToken cancellationToken);
 
-    Task<User> RegisterUserAsync(RegisterUserCommand request, CultureInfo culture, CancellationToken cancellationToken);
+    Task<User> RegisterUserAsync(RegisterUserCommand request, CancellationToken cancellationToken);
 
     Task<User> UpdateUserAsync(UpdateUserCommand request, CancellationToken cancellationToken);
 }

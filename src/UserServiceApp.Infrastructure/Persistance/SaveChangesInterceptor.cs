@@ -1,5 +1,3 @@
-using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using UserServiceApp.Domain.Common;
@@ -8,12 +6,8 @@ using UserServiceApp.Domain.Common.Interfaces;
 namespace UserServiceApp.Infrastructure.Persistance;
 
 public class SaveChangesInterceptor(
-    IHttpContextAccessor _httpContextAccessor,
-    IPublisher _publisher,
     IDateTimeProvider _dateTimeProvider) : ISaveChangesInterceptor
 {
-    private bool IsUserWaitingOnline() => _httpContextAccessor.HttpContext is not null;
-
     public InterceptionResult<int> SavingChanges(
         DbContextEventData eventData,
         InterceptionResult<int> result)

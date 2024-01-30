@@ -1,16 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
+using UserServiceApp.Application.Services;
 
 namespace UserServiceApp.API.Filters;
 
-public class LogActionParametersFilter : IActionFilter
+public class LogActionParametersFilter(ILogger<LogActionParametersFilter> _logger, UserPreferences _userPreferences) : IActionFilter
 {
-    private readonly ILogger _logger;
-
-    public LogActionParametersFilter(ILogger<LogActionParametersFilter> logger)
-    {
-        _logger = logger;
-    }
-
     public void OnActionExecuted(ActionExecutedContext context)
     {
         _logger.LogInformation($"Executed action {context.ActionDescriptor.DisplayName}");

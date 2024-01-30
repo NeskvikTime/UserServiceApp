@@ -1,7 +1,7 @@
 ﻿using UserServiceApp.API.Filters;
-using UserServiceApp.API.Services;
 using UserServiceApp.API.Swagger;
 using UserServiceApp.Application.Common.Interfaces;
+using UserServiceApp.Application.Services;
 
 namespace UserServiceApp.API;
 public static class DependencyInjection
@@ -11,7 +11,6 @@ public static class DependencyInjection
         services.AddControllers(cfg =>
         {
             cfg.Filters.Add(typeof(ExceptionFilter));
-            cfg.Filters.Add<LogActionParametersFilter>();
         });
 
         services.AddEndpointsApiExplorer();
