@@ -41,14 +41,6 @@ public class SaveChangesInterceptor(
         return result;
     }
 
-    private async Task PublishDomainEvents(List<IDomainEvent> domainEvents)
-    {
-        foreach (var domainEvent in domainEvents)
-        {
-            await _publisher.Publish(domainEvent);
-        }
-    }
-
     public ValueTask<InterceptionResult<int>> SavingChangesAsync(
         DbContextEventData eventData,
         InterceptionResult<int> result,
