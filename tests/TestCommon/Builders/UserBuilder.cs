@@ -17,7 +17,7 @@ public class UserBuilder : IBuilder<User>
     public User Build()
     {
         _id = Guid.NewGuid();
-        return new User(_username, _fullName, _email, _mobileNumber, _language, _culture, _passwordHash, IsAdmin, _id);
+        return new User(_username, _fullName, _email, _mobileNumber, _language, _culture, IsAdmin, _id);
     }
 
     public UserBuilder WithId(Guid id)

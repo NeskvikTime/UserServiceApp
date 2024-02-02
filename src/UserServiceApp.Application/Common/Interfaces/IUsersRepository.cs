@@ -1,6 +1,7 @@
 ﻿using UserServiceApp.Domain.UsersAggregate;
 
 namespace UserServiceApp.Application.Common.Interfaces;
+
 public interface IUsersRepository
 {
     Task AddUserAsync(User user, CancellationToken cancellationToken);
@@ -14,6 +15,7 @@ public interface IUsersRepository
     Task<User?> GetByIdAsync(Guid userId, CancellationToken cancellationToken);
 
     Task<User?> GetUserByEmailAsync(string email, CancellationToken cancellationToken);
+
     Task AddAsync(User user, CancellationToken cancellationToken);
 
     Task<bool> EmailIsUniqueAsync(Guid id, string email, CancellationToken cancellationToken);
@@ -23,4 +25,6 @@ public interface IUsersRepository
     Task<bool> UsernameIsUniqueAsync(Guid id, string name, CancellationToken cancellationToken);
 
     Task<bool> UsernameIsUniqueAsync(string name, CancellationToken cancellationToken);
+
+    Task<bool> UserByEmailExistsAsync(string email, CancellationToken cancellationToken);
 }

@@ -76,4 +76,11 @@ internal class UsersRepository(ApplicationDbContext _dbContext) : IUsersReposito
             .AsNoTracking()
             .AnyAsync(u => u.Email == email, cancellationToken);
     }
+
+    public async Task<bool> UserByEmailExistsAsync(string email, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Users
+            .AsNoTracking()
+            .AnyAsync(u => u.Email == email, cancellationToken);
+    }
 }

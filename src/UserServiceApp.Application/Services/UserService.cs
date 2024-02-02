@@ -53,14 +53,14 @@ internal class UserService(IUsersRepository _usersRepository,
 
         if (user is null)
         {
-            throw new NotFoundException($"User with email {email} not found");
+            throw new AuthorizationException("Wrong username or password.");
         }
 
         bool isPasswordValid = user.CheckPasswordAsync(password, _passwordHasher);
 
         if (!isPasswordValid)
         {
-            throw new ArgumentException("Invalid password");
+            throw new AuthorizationException("Wrong username or password.");
         }
 
         return user;
@@ -76,8 +76,9 @@ internal class UserService(IUsersRepository _usersRepository,
             command.Email,
             command.MobileNumber,
             _userPreferences.UserCulture,
-            _userPreferences.UserLanguage,
-            hahsedPassword);
+            _userPreferences.UserLanguage);
+
+        user.AssignHash(hahsedPassword);
 
         await _usersRepository.AddAsync(user, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

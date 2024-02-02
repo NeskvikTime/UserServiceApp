@@ -36,7 +36,7 @@ namespace UserServiceApp.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Culture", "DateCreated", "DateModified", "Email", "FullName", "IsAdmin", "Language", "MobileNumber", "Password", "PasswordHash", "Username" },
-                values: new object[] { new Guid("04e2d549-16d1-45bf-97c5-2c7f0ae1c210"), "en-US", new DateTime(2024, 2, 2, 16, 47, 20, 66, DateTimeKind.Utc).AddTicks(3558), new DateTime(2024, 2, 2, 16, 47, 20, 66, DateTimeKind.Utc).AddTicks(3558), "admin@localhost", "Admin", true, "English", "+65467891324586", "************", "$2a$11$brtnF9JLRcDsQTOJqj4KFuTqA1lmDi4lFBXrlgIHovuPSLGz29lvS", "admin" });
+                values: new object[] { new Guid("8b708975-1493-4201-9101-d614d50c64df"), "en-US", new DateTime(2024, 2, 2, 17, 8, 5, 322, DateTimeKind.Utc).AddTicks(7006), new DateTime(2024, 2, 2, 17, 8, 5, 322, DateTimeKind.Utc).AddTicks(7006), "admin@localhost", "Admin", true, "English", "+65467891324586", "*****************", "$2a$11$66w6KHRgEJLxQExVzMZfF.8RLuXeDg9XT4KgXaMfD/cO0/5a0JQtW", "admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Id_Email",

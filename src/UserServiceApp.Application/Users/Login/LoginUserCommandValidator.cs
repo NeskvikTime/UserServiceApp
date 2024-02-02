@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using UserServiceApp.Application.Common.Interfaces;
+using UserServiceApp.Domain.Exceptions;
 
 namespace UserServiceApp.Application.Users.Login;
 public class LoginUserCommandValidator : AbstractValidator<LoginUserCommand>
@@ -13,16 +14,21 @@ public class LoginUserCommandValidator : AbstractValidator<LoginUserCommand>
         RuleFor(x => x.Email)
             .NotEmpty()
             .EmailAddress()
-            .MustAsync(ValidateUserExistsByEmailAsync);
+            .CustomAsync(ValidateUserExistsByEmailAsync);
 
         RuleFor(x => x.Password)
             .NotEmpty();
     }
 
-    private async Task<bool> ValidateUserExistsByEmailAsync(string email, CancellationToken cancellationToken)
+    private async Task ValidateUserExistsByEmailAsync(string email,
+        ValidationContext<LoginUserCommand> context,
+        CancellationToken cancellationToken)
     {
-        var user = await _usersRepository.GetUserByEmailAsync(email, cancellationToken);
+        bool exsists = await _usersRepository.UserByEmailExistsAsync(email, cancellationToken);
 
-        return user != null;
+        if (exsists)
+        {
+            throw new AuthorizationException("Wrong username or password.");
+        }
     }
 }

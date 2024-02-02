@@ -41,7 +41,6 @@ public class UpdateUserCommandHandlerTests
             command.MobileNumber,
             "English", // Assuming UserService sets language based on culture
             command.NewCulture,
-            "hashedPassword", // Assuming password gets hashed in the service
             command.IsAdmin,
             userId);
 

@@ -28,7 +28,6 @@ public class User : AggregateRoot
         string mobileNumber,
         string language,
         string culture,
-        string passwordHash,
         bool isAdmin = false,
         Guid? id = null) : base(id ?? Guid.NewGuid())
     {
@@ -38,7 +37,6 @@ public class User : AggregateRoot
         MobileNumber = mobileNumber;
         Language = language;
         Culture = culture;
-        PasswordHash = passwordHash;
         // This password here is fake password, in order to distract unauthorized the reader
         Password = "*****************";
         IsAdmin = isAdmin;
@@ -49,10 +47,9 @@ public class User : AggregateRoot
         return passwordHasher.IsCorrectPassword(password, PasswordHash);
     }
 
-    public void AssignPasswordAndHash(string password, string hash)
+    public void AssignHash(string passwordHash)
     {
-        Password = password;
-        PasswordHash = hash;
+        PasswordHash = passwordHash;
     }
 
     public void UpdateUserData(string userName,

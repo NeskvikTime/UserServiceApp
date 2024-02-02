@@ -14,18 +14,18 @@ public static class DataGenerator
             "+65467891324586",
             "English",
             "en-US",
-            "Admin-1234!",
             true)
         {
             DateCreated = dateTime,
             DateModified = dateTime,
         };
 
-        string hashedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(admin.Password);
+        string hashedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword("Admin-1234!");
 
-        admin.AssignPasswordAndHash(admin.Password, hashedPassword);
+        admin.AssignHash(hashedPassword);
 
-        modelBuilder.Entity<User>().HasData(admin);
+        modelBuilder.Entity<User>()
+            .HasData(admin);
 
         return modelBuilder;
     }
