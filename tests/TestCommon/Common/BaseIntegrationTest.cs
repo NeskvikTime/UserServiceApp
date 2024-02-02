@@ -1,8 +1,7 @@
-﻿using DiffServiceApp.Application.Common.Interfaces;
-using DiffServiceApp.Domain.Common.Interfaces;
-using DiffServiceApp.Infrastructure.Persistance;
-using MediatR;
+﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using UserServiceApp.Application.Common.Interfaces;
+using UserServiceApp.Infrastructure.Persistance;
 using Xunit;
 
 namespace TestCommon.Common;
@@ -13,7 +12,7 @@ public abstract class BaseIntegrationTest
     private readonly IServiceScope _scope;
     protected readonly HttpClient _httpClient;
     protected readonly ISender _sender;
-    protected readonly IDiffCouplesRepository _diffCouplesRepository;
+    protected readonly IUsersRepository _userRepository;
     protected readonly IUnitOfWork _unitOfWork;
 
     internal readonly ApplicationDbContext DbContext;
@@ -25,7 +24,7 @@ public abstract class BaseIntegrationTest
         _httpClient = factory.CreateClient();
 
         _sender = _scope.ServiceProvider.GetRequiredService<ISender>();
-        _diffCouplesRepository = _scope.ServiceProvider.GetRequiredService<IDiffCouplesRepository>();
+        _userRepository = _scope.ServiceProvider.GetRequiredService<IUsersRepository>();
         _unitOfWork = _scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
         DbContext = _scope.ServiceProvider
@@ -38,7 +37,7 @@ public abstract class BaseIntegrationTest
 
     private async Task CleanDatabaseAsync()
     {
-        DbContext.DiffPayloadCouples.RemoveRange(DbContext.DiffPayloadCouples);
+        DbContext.Users.RemoveRange(DbContext.Users);
         await DbContext.SaveChangesAsync();
     }
 

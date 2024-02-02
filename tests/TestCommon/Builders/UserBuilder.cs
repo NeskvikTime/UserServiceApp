@@ -5,21 +5,13 @@ namespace TestCommon.Builders;
 public class UserBuilder : IBuilder<User>
 {
     private Guid _id = Guid.NewGuid();
-
-    private string _username = default!;
-
-    private string _fullName = default!;
-
-    private string _email = default!;
-
-    private string _mobileNumber = default!;
-
-    private string _language = default!;
-
-    private string _culture = default!;
-
-    private string _passwordHash = default!;
-
+    private string _username = "defaultUsername";
+    private string _fullName = "Default User";
+    private string _email = "user@example.com";
+    private string _mobileNumber = "000-000-0000";
+    private string _language = "English";
+    private string _culture = "en-US";
+    private string _passwordHash = "hashedPassword"; // Note: Ensure to use a realistically hashed password for actual tests
     private bool IsAdmin = false;
 
     public User Build()
@@ -67,12 +59,6 @@ public class UserBuilder : IBuilder<User>
     public UserBuilder WithCulture(string culture)
     {
         _culture = culture;
-        return this;
-    }
-
-    public UserBuilder WithPassword(string password)
-    {
-        _password = password;
         return this;
     }
 

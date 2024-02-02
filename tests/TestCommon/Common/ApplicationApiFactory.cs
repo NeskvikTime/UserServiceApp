@@ -1,6 +1,4 @@
-﻿using DiffServiceApp.API;
-using DiffServiceApp.Infrastructure.Persistance;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +7,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Testcontainers.MsSql;
+using UserServiceApp.API;
+using UserServiceApp.Infrastructure.Persistance;
 using Xunit;
 
 namespace TestCommon.Common;
-public class ApplicationApiFactory : WebApplicationFactory<IAssemblyMarker>, IAsyncLifetime
+public class ApplicationApiFactory : WebApplicationFactory<AssemblyMarker>, IAsyncLifetime
 {
     private readonly MsSqlContainer _dbContainer =
         new MsSqlBuilder()
