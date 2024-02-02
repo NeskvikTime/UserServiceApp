@@ -12,12 +12,13 @@ public class DeleteUserCommandValidator : AbstractValidator<DeleteUserCommand>
 
         RuleFor(x => x.UserId)
             .NotEmpty()
-            .MustAsync(async (userId, cancellationToken) =>
-            {
-                var user = await _usersRepository.GetByIdAsync(userId, cancellationToken);
-
-                return user != null;
-            })
+            .MustAsync(ValidateUserExistsAsync)
             .WithMessage(x => $"User with id: {x.UserId} does not exist.");
+    }
+
+    private async Task<bool> ValidateUserExistsAsync(Guid userId, CancellationToken cancellationToken)
+    {
+        var user = await _usersRepository.GetByIdAsync(userId, cancellationToken);
+        return user != null;
     }
 }

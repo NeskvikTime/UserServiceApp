@@ -13,14 +13,16 @@ public class LoginUserCommandValidator : AbstractValidator<LoginUserCommand>
         RuleFor(x => x.Email)
             .NotEmpty()
             .EmailAddress()
-            .MustAsync(async (email, cancellationToken) =>
-            {
-                var user = await usersRepository.GetUserByEmailAsync(email, cancellationToken);
-
-                return user != null;
-            });
+            .MustAsync(ValidateUserExistsByEmailAsync);
 
         RuleFor(x => x.Password)
             .NotEmpty();
+    }
+
+    private async Task<bool> ValidateUserExistsByEmailAsync(string email, CancellationToken cancellationToken)
+    {
+        var user = await _usersRepository.GetUserByEmailAsync(email, cancellationToken);
+
+        return user != null;
     }
 }

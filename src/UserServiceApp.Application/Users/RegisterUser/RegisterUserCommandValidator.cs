@@ -13,12 +13,7 @@ public class RegisterUserCommandValidator : AbstractValidator<RegisterUserComman
         RuleFor(x => x.UserName)
             .NotEmpty()
             .MaximumLength(20)
-            .MustAsync(async (username, cancellationToken) =>
-            {
-                var usernameIsUnique = await _usersRepository.UsernameIsUniqueAsync(username, cancellationToken);
-
-                return usernameIsUnique;
-            })
+            .MustAsync(UsernameIsUniqueAsync)
             .WithMessage(errorMessage: "Username already exists");
 
         RuleFor(x => x.FullName)
@@ -28,12 +23,7 @@ public class RegisterUserCommandValidator : AbstractValidator<RegisterUserComman
         RuleFor(x => x.Email)
             .NotEmpty()
             .EmailAddress()
-            .MustAsync(async (email, cancellationToken) =>
-            {
-                var emailIsUnique = await _usersRepository.EmailIsUniqueAsync(email, cancellationToken);
-
-                return emailIsUnique;
-            })
+            .MustAsync(EmailIsUniqueAsync)
             .WithMessage(errorMessage: "Email already exists");
 
         RuleFor(x => x.MobileNumber)
@@ -45,6 +35,17 @@ public class RegisterUserCommandValidator : AbstractValidator<RegisterUserComman
             .NotEmpty()
             .Matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$")
             .WithMessage(errorMessage: "Password must have at least one number, symbol and capital letter. The minumum lenght is 8 characters,");
+    }
 
+    private async Task<bool> UsernameIsUniqueAsync(string username, CancellationToken cancellationToken)
+    {
+        var usernameIsUnique = await _usersRepository.UsernameIsUniqueAsync(username, cancellationToken);
+        return usernameIsUnique;
+    }
+
+    private async Task<bool> EmailIsUniqueAsync(string email, CancellationToken cancellationToken)
+    {
+        var emailIsUnique = await _usersRepository.EmailIsUniqueAsync(email, cancellationToken);
+        return emailIsUnique;
     }
 }

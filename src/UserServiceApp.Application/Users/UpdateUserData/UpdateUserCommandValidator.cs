@@ -16,12 +16,7 @@ public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
         RuleFor(x => x.UserName)
             .NotEmpty()
             .MaximumLength(20)
-            .MustAsync(async (command, username, cancellationToken) =>
-            {
-                var usernameIsUnique = await _usersRepository.UsernameIsUniqueAsync(command.UserId, username, cancellationToken);
-
-                return usernameIsUnique;
-            })
+            .MustAsync(UsernameIsUniqueAsync)
             .WithMessage(errorMessage: "Username already exists");
 
         RuleFor(x => x.FullName)
@@ -30,12 +25,7 @@ public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
         RuleFor(x => x.Email)
             .NotEmpty()
             .EmailAddress()
-            .MustAsync(async (command, email, cancellationToken) =>
-            {
-                var emailIsUnique = await _usersRepository.EmailIsUniqueAsync(command.UserId, email, cancellationToken);
-
-                return emailIsUnique;
-            })
+            .MustAsync(EmailIsUniqueAsync)
             .WithMessage(errorMessage: "Email already exists");
 
         RuleFor(x => x.NewPassword)
@@ -52,5 +42,17 @@ public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
             .NotEmpty()
             .Matches(@"^[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})*$")
             .WithMessage(errorMessage: "Culture should have correct format. Example: en-US");
+    }
+
+    private async Task<bool> UsernameIsUniqueAsync(UpdateUserCommand command, string username, CancellationToken cancellationToken)
+    {
+        var usernameIsUnique = await _usersRepository.UsernameIsUniqueAsync(command.UserId, username, cancellationToken);
+        return usernameIsUnique;
+    }
+
+    private async Task<bool> EmailIsUniqueAsync(UpdateUserCommand command, string email, CancellationToken cancellationToken)
+    {
+        var emailIsUnique = await _usersRepository.EmailIsUniqueAsync(command.UserId, email, cancellationToken);
+        return emailIsUnique;
     }
 }
