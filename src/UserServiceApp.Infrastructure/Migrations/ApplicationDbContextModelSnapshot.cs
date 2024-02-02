@@ -40,7 +40,7 @@ namespace UserServiceApp.Infrastructure.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
@@ -73,22 +73,24 @@ namespace UserServiceApp.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Id", "Email");
+
                     b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d46b0d91-bd1d-4001-a754-5c510f35d9b7"),
+                            Id = new Guid("04e2d549-16d1-45bf-97c5-2c7f0ae1c210"),
                             Culture = "en-US",
-                            DateCreated = new DateTime(2024, 1, 28, 18, 5, 2, 53, DateTimeKind.Utc).AddTicks(4433),
-                            DateModified = new DateTime(2024, 1, 28, 18, 5, 2, 53, DateTimeKind.Utc).AddTicks(4433),
+                            DateCreated = new DateTime(2024, 2, 2, 16, 47, 20, 66, DateTimeKind.Utc).AddTicks(3558),
+                            DateModified = new DateTime(2024, 2, 2, 16, 47, 20, 66, DateTimeKind.Utc).AddTicks(3558),
                             Email = "admin@localhost",
                             FullName = "Admin",
                             IsAdmin = true,
                             Language = "English",
                             MobileNumber = "+65467891324586",
-                            Password = "*******",
-                            PasswordHash = "$2a$11$mDnnjZbz36Z2HWW9/venvu.Smd2hQOcIsUYWmW4LGveSaT1Ao9N3W",
+                            Password = "************",
+                            PasswordHash = "$2a$11$brtnF9JLRcDsQTOJqj4KFuTqA1lmDi4lFBXrlgIHovuPSLGz29lvS",
                             Username = "admin"
                         });
                 });

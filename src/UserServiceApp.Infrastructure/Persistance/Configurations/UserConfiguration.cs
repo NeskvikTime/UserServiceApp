@@ -9,6 +9,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     {
         builder.HasKey(x => x.Id);
 
+        builder.HasIndex(x => new { x.Id, x.Email });
+
         builder.Property(x => x.Username)
             .IsRequired();
 

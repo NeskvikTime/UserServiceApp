@@ -22,9 +22,8 @@ public static class DataGenerator
         };
 
         string hashedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword(admin.Password);
-        string hiddenPassword = "************";
 
-        admin.AssignPasswordAndHash(hiddenPassword, hashedPassword);
+        admin.AssignPasswordAndHash(admin.Password, hashedPassword);
 
         modelBuilder.Entity<User>().HasData(admin);
 

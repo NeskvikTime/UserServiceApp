@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using UserServiceApp.Contracts.Common.Interfaces;
 using UserServiceApp.Domain.Common;
@@ -21,16 +22,9 @@ public class SaveChangesInterceptor(
 
         DateTime savingDateTime = _dateTimeProvider.UtcNow;
 
-        foreach (var entry in _context.ChangeTracker.Entries<BaseEntity>()
-            .Where(q => q.State == EntityState.Added || q.State == EntityState.Modified))
-        {
-            entry.Entity.DateModified = savingDateTime;
-
-            if (entry.State == EntityState.Added)
-            {
-                entry.Entity.DateCreated = savingDateTime;
-            }
-        }
+        UpdateEntityDates(_context.ChangeTracker.Entries<BaseEntity>()
+            .Where(q => q.State == EntityState.Added || q.State == EntityState.Modified),
+            savingDateTime);
 
         return result;
     }
@@ -43,4 +37,16 @@ public class SaveChangesInterceptor(
         return ValueTask.FromResult(SavingChanges(eventData, result));
     }
 
+    private void UpdateEntityDates(IEnumerable<EntityEntry<BaseEntity>> entries, DateTime savingDateTime)
+    {
+        foreach (var entry in entries)
+        {
+            entry.Entity.DateModified = savingDateTime;
+
+            if (entry.State == EntityState.Added)
+            {
+                entry.Entity.DateCreated = savingDateTime;
+            }
+        }
+    }
 }

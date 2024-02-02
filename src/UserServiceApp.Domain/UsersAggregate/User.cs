@@ -39,6 +39,7 @@ public class User : AggregateRoot
         Language = language;
         Culture = culture;
         PasswordHash = passwordHash;
+        // This password here is fake password, in order to distract unauthorized the reader
         Password = "*****************";
         IsAdmin = isAdmin;
     }
