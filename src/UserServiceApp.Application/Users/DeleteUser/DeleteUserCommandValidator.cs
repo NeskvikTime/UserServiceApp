@@ -13,7 +13,7 @@ public class DeleteUserCommandValidator : AbstractValidator<DeleteUserCommand>
         RuleFor(x => x.UserId)
             .NotEmpty()
             .MustAsync(ValidateUserExistsAsync)
-            .WithMessage(x => $"User with id: {x.UserId} does not exist.");
+            .WithMessage(x => $"User with Id: {x.UserId} does not exist.");
     }
 
     private async Task<bool> ValidateUserExistsAsync(Guid userId, CancellationToken cancellationToken)
