@@ -40,6 +40,21 @@ To enter bearer token in swagger, click the button "Authorize" (upper right corn
 Postman: Send requests to the application's endpoints.
 Use the JSON request payloads as described in the assignment instructions.
 
-During all types of testing (API and integration tests), docker should be running on your machine!
+Ensure Docker is running on your machine during all types of testing (API and integration tests)!
 
 # 6. Functionalities
+
+A default admin user is created with the following credentials:
+
+Username: admin
+Password: Admin-1234!
+
+The admin profile can be used to create new users, update user details, delete users, view user details, and promote other basic users to the admin role.
+
+Anyone can create a new user, but its role will be set to "User" by default.
+
+To retrieve user data (get or getAll), a valid Bearer token is required in the request header.
+
+When registering a new user, the culture will be taken from the client's local machine automatically. It can be changed later by the administrator with the update endpoint, passed in headers as the NewUserCulture query parameter.
+
+Enjoy using the app! :)

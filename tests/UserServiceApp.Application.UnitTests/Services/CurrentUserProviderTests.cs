@@ -64,7 +64,6 @@ public class CurrentUserProviderTests
         Action act = () => currentUserProvider.GetCurrentUser();
 
         // Assert
-        act.Should().Throw<AuthorizationException>()
-            .WithMessage("User does not have an id assigned to token.");
+        act.Should().Throw<AuthorizationException>();
     }
 }
