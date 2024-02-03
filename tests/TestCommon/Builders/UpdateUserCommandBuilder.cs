@@ -68,8 +68,8 @@ public class UpdateUserCommandBuilder
             _fullName,
             _email,
             _mobileNumber,
-            _newCulture,
             _isAdmin,
-            _newPassword);
+            _newPassword,
+            _newCulture);
     }
 }

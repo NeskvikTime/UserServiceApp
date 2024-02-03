@@ -78,7 +78,7 @@ internal class UserService(IUsersRepository _usersRepository,
             _userPreferences.UserCulture,
             _userPreferences.UserLanguage);
 
-        user.AssignHash(hahsedPassword);
+        user.AssignPasswordHash(hahsedPassword);
 
         await _usersRepository.AddAsync(user, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
@@ -97,9 +97,11 @@ internal class UserService(IUsersRepository _usersRepository,
 
         CultureInfo culture;
 
+        string newCulture = request.NewCulture ?? _userPreferences.UserCulture;
+
         try
         {
-            culture = CultureInfo.GetCultureInfo(request.NewCulture);
+            culture = CultureInfo.GetCultureInfo(newCulture);
         }
         catch (CultureNotFoundException)
         {

@@ -15,7 +15,7 @@ namespace UserServiceApp.API.Controllers;
 public class UsersController(ISender _sender) : ControllerBase
 {
     [HttpGet("getAll")]
-    public async Task<IActionResult> GetUserData(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllUserDatas(CancellationToken cancellationToken)
     {
         var query = new GetUserDatasQuery(null);
 
@@ -25,7 +25,7 @@ public class UsersController(ISender _sender) : ControllerBase
     }
 
     [HttpGet("get/{userId:guid}")]
-    public async Task<IActionResult> GetUserDatas([FromRoute] Guid userId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetUserData([FromRoute] Guid userId, CancellationToken cancellationToken)
     {
         var query = new GetUserDatasQuery(userId);
 
@@ -35,7 +35,10 @@ public class UsersController(ISender _sender) : ControllerBase
     }
 
     [HttpPut("update/{userId:guid}")]
-    public async Task<IActionResult> UpdateUserData([FromRoute] Guid userId, [FromQuery] string newAcceptLanguageCulture, UpdateUserRequest request)
+    public async Task<IActionResult> UpdateUserData(
+        [FromRoute] Guid userId,
+        UpdateUserRequest request,
+        [FromHeader] string? NewUserCulture = null)
     {
         var command = new UpdateUserCommand(
             userId,
@@ -43,15 +46,16 @@ public class UsersController(ISender _sender) : ControllerBase
             request.NewFullName,
             request.Email,
             request.NewMobileNumber,
-            newAcceptLanguageCulture,
-            request.isAdmin,
-            request.NewPassword);
+            request.IsAdmin,
+            request.NewPassword,
+            NewUserCulture);
 
         var result = await _sender.Send(command, CancellationToken.None);
         return Ok(result);
     }
 
-    [HttpPost("create")]
+    [AllowAnonymous]
+    [HttpPost("register")]
     public async Task<IActionResult> RegisterUser(RegisterUserRequest request)
     {
         var command = new RegisterUserCommand(

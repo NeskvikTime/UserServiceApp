@@ -4,5 +4,5 @@ public record UpdateUserRequest(
     string NewFullName,
     string Email,
     string NewMobileNumber,
-    bool isAdmin = false,
+    bool IsAdmin = false,
     string? NewPassword = null);

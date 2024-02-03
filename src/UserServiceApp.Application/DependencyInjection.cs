@@ -15,8 +15,8 @@ public static class DependencyInjection
         {
             options.RegisterServicesFromAssemblyContaining(typeof(DependencyInjection));
 
-            options.AddOpenBehavior(typeof(ValidationBehavior<,>));
             options.AddOpenBehavior(typeof(AuthorizationBehavior<,>));
+            options.AddOpenBehavior(typeof(ValidationBehavior<,>));
         });
 
         services.AddScoped<UserPreferences>();

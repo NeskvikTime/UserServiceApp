@@ -2,6 +2,7 @@
 using UserServiceApp.Contracts.Users;
 
 namespace TestCommon.Builders;
+
 public class UserResponseBuilder : IBuilder<UserResponse>
 {
     private Guid _id = Guid.NewGuid();

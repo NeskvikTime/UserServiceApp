@@ -22,7 +22,7 @@ public static class DataGenerator
 
         string hashedPassword = BCrypt.Net.BCrypt.EnhancedHashPassword("Admin-1234!");
 
-        admin.AssignHash(hashedPassword);
+        admin.AssignPasswordHash(hashedPassword);
 
         modelBuilder.Entity<User>()
             .HasData(admin);

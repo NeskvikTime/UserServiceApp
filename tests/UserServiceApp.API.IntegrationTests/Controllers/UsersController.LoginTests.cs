@@ -10,6 +10,8 @@ using UserServiceApp.Domain.UsersAggregate;
 namespace UserServiceApp.API.IntegrationTests.Controllers;
 public class LoginAsyncTests : BaseIntegrationTest
 {
+    private const string UrlPath = "/v1/users/login";
+
     public LoginAsyncTests(ApplicationApiFactory factory) : base(factory)
     {
     }
@@ -30,7 +32,7 @@ public class LoginAsyncTests : BaseIntegrationTest
             .WithCulture("en-US")
             .Build();
 
-        newUser.AssignHash(hashedPassword);
+        newUser.AssignPasswordHash(hashedPassword);
 
         CancellationToken cancellationToken = CancellationToken.None;
 
@@ -41,10 +43,8 @@ public class LoginAsyncTests : BaseIntegrationTest
 
         _dbContext.Users.Should().ContainEquivalentOf(newUser);
 
-        string urlPath = "/v1/users/login";
-
         // Act
-        var response = await _httpClient.PostAsJsonAsync(urlPath, loginRequest, cancellationToken);
+        var response = await _httpClient.PostAsJsonAsync(UrlPath, loginRequest, cancellationToken);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
@@ -70,17 +70,15 @@ public class LoginAsyncTests : BaseIntegrationTest
         string userPasswor = "TestPassword123#";
         string wrongPassword = "WrongPassword123#";
 
-        newUser.AssignHash(_passwordHasher.HashPassword(userPasswor));
+        newUser.AssignPasswordHash(_passwordHasher.HashPassword(userPasswor));
 
         await _userRepository.AddAsync(newUser, CancellationToken.None);
         await _unitOfWork.SaveChangesAsync();
 
         var loginRequest = new LoginRequest(newUser.Email, wrongPassword);
 
-        string urlPath = "/v1/users/login";
-
         // Act
-        var response = await _httpClient.PostAsJsonAsync(urlPath, loginRequest);
+        var response = await _httpClient.PostAsJsonAsync(UrlPath, loginRequest);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
@@ -93,23 +91,22 @@ public class LoginAsyncTests : BaseIntegrationTest
         var loginRequest = new LoginRequest("nonexistent@example.com", "AnyPassword123!");
 
         // Act
-        var response = await _httpClient.PostAsJsonAsync("/v1/users/login", loginRequest);
+        var response = await _httpClient.PostAsJsonAsync(UrlPath, loginRequest);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
 
     [Fact]
-    public async Task Login_WithMalformedRequest_ReturnsUnauthorized()
+    public async Task Login_WithMalformedRequest_BadRequest()
     {
         // Arrange - Example with missing password field
         var loginRequest = new LoginRequest("nonexistent@example.com", string.Empty);
 
-
         // Act
-        var response = await _httpClient.PostAsJsonAsync("/v1/users/login", loginRequest);
+        var response = await _httpClient.PostAsJsonAsync(UrlPath, loginRequest);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 }

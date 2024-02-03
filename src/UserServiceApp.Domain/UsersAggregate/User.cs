@@ -47,7 +47,7 @@ public class User : AggregateRoot
         return passwordHasher.IsCorrectPassword(password, PasswordHash);
     }
 
-    public void AssignHash(string passwordHash)
+    public void AssignPasswordHash(string passwordHash)
     {
         PasswordHash = passwordHash;
     }

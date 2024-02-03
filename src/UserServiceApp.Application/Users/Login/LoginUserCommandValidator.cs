@@ -14,16 +14,20 @@ public class LoginUserCommandValidator : AbstractValidator<LoginUserCommand>
         RuleFor(x => x.Email)
             .NotEmpty()
             .NotNull()
-            .EmailAddress()
-            .CustomAsync(ValidateUserExistsByEmailAsync);
+            .EmailAddress();
+
+        When(x => !string.IsNullOrWhiteSpace(x.Email) && !string.IsNullOrWhiteSpace(x.Password), () =>
+        {
+            RuleFor(x => x.Email)
+                .CustomAsync(ValidateUserExistsByEmailAsync);
+        });
 
         RuleFor(x => x.Password)
             .NotEmpty()
             .NotNull();
     }
 
-    private async Task ValidateUserExistsByEmailAsync(string email,
-        ValidationContext<LoginUserCommand> context,
+    private async Task ValidateUserExistsByEmailAsync(string email, ValidationContext<LoginUserCommand> context,
         CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(email) || !email.Contains("@"))

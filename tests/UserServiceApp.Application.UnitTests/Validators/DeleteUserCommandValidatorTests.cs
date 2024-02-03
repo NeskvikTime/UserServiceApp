@@ -1,8 +1,10 @@
-﻿using FluentValidation.TestHelper;
+﻿using FluentAssertions;
+using FluentValidation.TestHelper;
 using NSubstitute;
 using TestCommon.Builders;
 using UserServiceApp.Application.Common.Interfaces;
 using UserServiceApp.Application.Users.DeleteUser;
+using UserServiceApp.Domain.Exceptions;
 using UserServiceApp.Domain.UsersAggregate;
 
 namespace UserServiceApp.Application.UnitTests.Validators;
@@ -46,9 +48,9 @@ public class DeleteUserCommandValidatorTests
             .Returns((User)null!);
 
         // Act
-        var result = await _validator.TestValidateAsync(command);
+        Func<Task> act = async () => await _validator.TestValidateAsync(command);
 
         // Assert
-        result.ShouldHaveValidationErrorFor(x => x.UserId);
+        await act.Should().ThrowAsync<NotFoundException>();
     }
 }

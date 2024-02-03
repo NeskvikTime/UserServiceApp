@@ -1,6 +1,11 @@
-﻿using MediatR;
+﻿using FluentAssertions;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net;
+using System.Net.Http.Json;
 using UserServiceApp.Application.Common.Interfaces;
+using UserServiceApp.Contracts.Common;
+using UserServiceApp.Contracts.Users;
 using UserServiceApp.Domain.Common.Interfaces;
 using UserServiceApp.Infrastructure.Persistance;
 using Xunit;
@@ -42,7 +47,7 @@ public abstract class BaseIntegrationTest
 
     private async Task CleanDatabaseAsync()
     {
-        _dbContext.Users.RemoveRange(_dbContext.Users);
+        _dbContext.Users.RemoveRange(_dbContext.Users.Where(user => user.Username != "Admin"));
         await _dbContext.SaveChangesAsync();
     }
 
@@ -51,5 +56,19 @@ public abstract class BaseIntegrationTest
         _scope?.Dispose();
         _dbContext?.Dispose();
         _httpClient?.Dispose();
+    }
+
+    public async Task<AuthenticationResult> LoginAdminAsync(CancellationToken cancellationToken)
+    {
+        var loginAdminRequest = new LoginRequest("admin@localhost", "Admin-1234!");
+
+        var loginResponse = await _httpClient.PostAsJsonAsync("/v1/users/login", loginAdminRequest, cancellationToken);
+        loginResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        var authResult = await loginResponse.Content.ReadFromJsonAsync<AuthenticationResult>(cancellationToken);
+        authResult.Should().NotBeNull();
+        authResult?.Token.Should().NotBeNull();
+        authResult?.UserResponse.Email.Should().Be(loginAdminRequest.Email);
+
+        return authResult!;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using UserServiceApp.Application.Common.Interfaces;
+using UserServiceApp.Domain.Exceptions;
 
 namespace UserServiceApp.Application.Users.DeleteUser;
 public class DeleteUserCommandValidator : AbstractValidator<DeleteUserCommand>
@@ -12,13 +13,18 @@ public class DeleteUserCommandValidator : AbstractValidator<DeleteUserCommand>
 
         RuleFor(x => x.UserId)
             .NotEmpty()
-            .MustAsync(ValidateUserExistsAsync)
-            .WithMessage(x => $"User with Id: {x.UserId} does not exist.");
+            .CustomAsync(ValidateUserExistsAsync);
     }
 
-    private async Task<bool> ValidateUserExistsAsync(Guid userId, CancellationToken cancellationToken)
+    private async Task ValidateUserExistsAsync(Guid userId,
+        ValidationContext<DeleteUserCommand> context,
+        CancellationToken cancellationToken)
     {
         var user = await _usersRepository.GetByIdAsync(userId, cancellationToken);
-        return user != null;
+
+        if (user is null)
+        {
+            throw new NotFoundException($"User with Id: '{userId}' has not been found.");
+        }
     }
 }

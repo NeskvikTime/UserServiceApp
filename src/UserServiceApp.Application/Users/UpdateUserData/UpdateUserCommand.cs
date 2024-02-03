@@ -11,6 +11,6 @@ public record UpdateUserCommand(
     string FullName,
     string Email,
     string MobileNumber,
-    string NewCulture,
     bool IsAdmin = false,
-    string? NewPassword = null) : IRequest<UserResponse>;
+    string? NewPassword = null,
+    string? NewCulture = null) : IRequest<UserResponse>;
