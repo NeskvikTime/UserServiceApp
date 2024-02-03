@@ -13,7 +13,7 @@ public class CurrentUserProvider(UserPreferences _userPreferences) : ICurrentUse
 
         if (claimValues.Count == 0)
         {
-            throw new AuthorizationException("User does not have an id assigned to token.");
+            throw new AuthorizationException("Bearer token is not valid.");
         }
 
         string id = claimValues.First();

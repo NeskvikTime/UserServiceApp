@@ -38,10 +38,13 @@ public class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
             .Matches(@"^\+[1-9]\d{1,14}$")
             .WithMessage("Mobile number must be in international format. Example: +40721234567");
 
-        RuleFor(x => x.NewCulture)
-            .NotEmpty()
-            .Matches(@"^[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})*$")
-            .WithMessage("Culture should have correct format. Example: en-US");
+        When(x => !string.IsNullOrWhiteSpace(x.NewCulture), () =>
+        {
+            RuleFor(x => x.NewCulture)
+                .NotEmpty()
+                .Matches(@"^[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})*$")
+                .WithMessage(errorMessage: "Culture should have correct format. Example: en-US");
+        });
     }
 
     private async Task<bool> UsernameIsUniqueAsync(UpdateUserCommand command, string username, CancellationToken cancellationToken)

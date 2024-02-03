@@ -54,12 +54,12 @@ internal class UsersRepository(ApplicationDbContext _dbContext) : IUsersReposito
             .AnyAsync(u => u.Username == name, cancellationToken);
     }
 
-    public async Task<bool> UsernameIsUniqueAsync(Guid id, string name, CancellationToken cancellationToken)
+    public async Task<bool> UsernameIsUniqueAsync(Guid id, string username, CancellationToken cancellationToken)
     {
         return !await _dbContext.Users
             .Where(u => u.Id != id)
             .AsNoTracking()
-            .AnyAsync(u => u.Username == name, cancellationToken);
+            .AnyAsync(u => u.Username == username, cancellationToken);
     }
 
     public async Task<bool> EmailIsUniqueAsync(string email, CancellationToken cancellationToken)

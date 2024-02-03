@@ -22,7 +22,7 @@ public interface IUsersRepository
 
     Task<bool> EmailIsUniqueAsync(string email, CancellationToken cancellationToken);
 
-    Task<bool> UsernameIsUniqueAsync(Guid id, string name, CancellationToken cancellationToken);
+    Task<bool> UsernameIsUniqueAsync(Guid id, string username, CancellationToken cancellationToken);
 
     Task<bool> UsernameIsUniqueAsync(string name, CancellationToken cancellationToken);
 
