@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using UserServiceApp.Domain.Common.Interfaces;
 
-namespace GymManagement.Infrastructure.Authentication.PasswordHasher;
+namespace UserServiceApp.Infrastructure.Authentication.PasswordHasher;
 
 public partial class PasswordHasher : IPasswordHasher
 {

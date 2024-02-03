@@ -11,7 +11,7 @@ public class UserBuilder : IBuilder<User>
     private string _mobileNumber = "000-000-0000";
     private string _language = "English";
     private string _culture = "en-US";
-    private string _passwordHash = "hashedPassword"; // Note: Ensure to use a realistically hashed password for actual tests
+    private string _passwordHash = "hashedPassword";
     private bool IsAdmin = false;
 
     public User Build()

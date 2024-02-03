@@ -13,20 +13,27 @@ public class LoginUserCommandValidator : AbstractValidator<LoginUserCommand>
 
         RuleFor(x => x.Email)
             .NotEmpty()
+            .NotNull()
             .EmailAddress()
             .CustomAsync(ValidateUserExistsByEmailAsync);
 
         RuleFor(x => x.Password)
-            .NotEmpty();
+            .NotEmpty()
+            .NotNull();
     }
 
     private async Task ValidateUserExistsByEmailAsync(string email,
         ValidationContext<LoginUserCommand> context,
         CancellationToken cancellationToken)
     {
+        if (string.IsNullOrWhiteSpace(email) || !email.Contains("@"))
+        {
+            return;
+        }
+
         bool exsists = await _usersRepository.UserByEmailExistsAsync(email, cancellationToken);
 
-        if (exsists)
+        if (!exsists)
         {
             throw new AuthorizationException("Wrong username or password.");
         }

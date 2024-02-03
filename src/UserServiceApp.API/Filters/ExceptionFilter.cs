@@ -39,7 +39,7 @@ public class ExceptionFilter : IExceptionFilter
                 problemDetails = new ProblemDetails
                 {
                     Type = "https://datatracker.ietf.org/doc/html/rfc7235#section-3.1",
-                    Status = StatusCodes.Status401Unauthorized,
+                    Status = StatusCodes.Status403Forbidden,
                     Title = "Unauthorized",
                     Detail = context.Exception.Message
                 };
@@ -49,7 +49,7 @@ public class ExceptionFilter : IExceptionFilter
                 problemDetails = new ProblemDetails
                 {
                     Type = "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.3",
-                    Status = StatusCodes.Status403Forbidden,
+                    Status = StatusCodes.Status401Unauthorized,
                     Title = "Forbidden",
                     Detail = context.Exception.Message
                 };

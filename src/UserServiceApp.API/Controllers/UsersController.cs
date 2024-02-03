@@ -39,10 +39,10 @@ public class UsersController(ISender _sender) : ControllerBase
     {
         var command = new UpdateUserCommand(
             userId,
-            request.UserName,
-            request.FullName,
+            request.NewUserName,
+            request.NewFullName,
             request.Email,
-            request.MobileNumber,
+            request.NewMobileNumber,
             newAcceptLanguageCulture,
             request.isAdmin,
             request.NewPassword);

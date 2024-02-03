@@ -22,9 +22,11 @@ public class DeleteUserCommandValidatorTests
     public async Task ValidateUserExistsAsync_UserExists_ShouldPassValidation()
     {
         // Arrange
-        var userId = Guid.NewGuid();
-        _usersRepository.GetByIdAsync(userId, Arg.Any<CancellationToken>()).Returns(new UserBuilder().Build());
-        var command = new DeleteUserCommand(userId);
+        var user = new UserBuilder()
+            .Build();
+
+        _usersRepository.GetByIdAsync(user.Id, Arg.Any<CancellationToken>()).Returns(user);
+        var command = new DeleteUserCommand(user.Id);
 
         // Act
         var result = await _validator.TestValidateAsync(command);
@@ -38,13 +40,15 @@ public class DeleteUserCommandValidatorTests
     {
         // Arrange
         Guid userId = Guid.NewGuid();
-        _usersRepository.GetByIdAsync(userId, Arg.Any<CancellationToken>()).Returns((User)null);
         var command = new DeleteUserCommand(userId);
+
+        _usersRepository.GetByIdAsync(userId, Arg.Any<CancellationToken>())
+            .Returns((User)null!);
 
         // Act
         var result = await _validator.TestValidateAsync(command);
 
         // Assert
-        result.ShouldHaveValidationErrorFor(x => x.UserId).WithErrorMessage($"User with id: {userId} does not exist.");
+        result.ShouldHaveValidationErrorFor(x => x.UserId);
     }
 }

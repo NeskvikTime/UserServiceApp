@@ -1,9 +1,9 @@
-﻿using FluentValidation.TestHelper;
+﻿using FluentAssertions;
+using FluentValidation.TestHelper;
 using NSubstitute;
-using TestCommon.Builders;
 using UserServiceApp.Application.Common.Interfaces;
 using UserServiceApp.Application.Users.Login;
-using UserServiceApp.Domain.UsersAggregate;
+using UserServiceApp.Domain.Exceptions;
 
 namespace UserServiceApp.Application.UnitTests.Validators;
 public class LoginUserCommandValidatorTests
@@ -22,8 +22,10 @@ public class LoginUserCommandValidatorTests
         // Arrange
         var command = new LoginUserCommand(string.Empty, "ValidPassword123");
 
-        // Act & Assert
+        // Act
         var result = await _validator.TestValidateAsync(command);
+
+        // Assert
         result.ShouldHaveValidationErrorFor(x => x.Email);
     }
 
@@ -33,8 +35,11 @@ public class LoginUserCommandValidatorTests
         // Arrange
         var command = new LoginUserCommand("notanemail", "ValidPassword123");
 
-        // Act & Assert
+
+        // Act
         var result = await _validator.TestValidateAsync(command);
+
+        // Assert
         result.ShouldHaveValidationErrorFor(x => x.Email);
     }
 
@@ -42,14 +47,18 @@ public class LoginUserCommandValidatorTests
     public async Task Should_Have_Error_When_User_Does_Not_Exist_By_Email()
     {
         // Arrange
-        _usersRepository.GetUserByEmailAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-            .Returns(Task.FromResult<User?>(null));
+        var command = new LoginUserCommand(
+            "user@doesnotexist.com",
+            "Password123");
 
-        var command = new LoginUserCommand("user@doesnotexist.com", "Password123");
+        _usersRepository.UserByEmailExistsAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(false));
 
-        // Act & Assert
-        var result = await _validator.TestValidateAsync(command);
-        result.ShouldHaveValidationErrorFor(x => x.Email);
+        // Act
+        Func<Task> act = async () => await _validator.TestValidateAsync(command);
+
+        // Assert
+        await act.Should().ThrowAsync<AuthorizationException>();
     }
 
     [Fact]
@@ -58,8 +67,13 @@ public class LoginUserCommandValidatorTests
         // Arrange
         var command = new LoginUserCommand("user@example.com", string.Empty);
 
-        // Act & Assert
+        _usersRepository.UserByEmailExistsAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(true));
+
+        // Act
         var result = await _validator.TestValidateAsync(command);
+
+        // Assert
         result.ShouldHaveValidationErrorFor(x => x.Password);
     }
 
@@ -67,13 +81,15 @@ public class LoginUserCommandValidatorTests
     public async Task Should_Not_Have_Error_When_Command_Is_Valid()
     {
         // Arrange
-        _usersRepository.GetUserByEmailAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-            .Returns(Task.FromResult<User?>(new UserBuilder().Build())); // Assuming UserBuilder provides a valid User object.
+        _usersRepository.UserByEmailExistsAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(true));
 
         var command = new LoginUserCommand("validuser@example.com", "ValidPassword123");
 
-        // Act & Assert
+        // Act
         var result = await _validator.TestValidateAsync(command);
+
+        // Assert
         result.ShouldNotHaveAnyValidationErrors();
     }
 }

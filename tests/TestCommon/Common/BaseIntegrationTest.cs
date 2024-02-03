@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using UserServiceApp.Application.Common.Interfaces;
+using UserServiceApp.Domain.Common.Interfaces;
 using UserServiceApp.Infrastructure.Persistance;
 using Xunit;
 
@@ -14,8 +15,9 @@ public abstract class BaseIntegrationTest
     protected readonly ISender _sender;
     protected readonly IUsersRepository _userRepository;
     protected readonly IUnitOfWork _unitOfWork;
+    protected readonly IPasswordHasher _passwordHasher;
 
-    internal readonly ApplicationDbContext DbContext;
+    internal readonly ApplicationDbContext _dbContext;
 
     public BaseIntegrationTest(ApplicationApiFactory factory)
     {
@@ -27,8 +29,11 @@ public abstract class BaseIntegrationTest
         _userRepository = _scope.ServiceProvider.GetRequiredService<IUsersRepository>();
         _unitOfWork = _scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
-        DbContext = _scope.ServiceProvider
+        _dbContext = _scope.ServiceProvider
             .GetRequiredService<ApplicationDbContext>();
+
+        _passwordHasher = _scope.ServiceProvider
+            .GetRequiredService<IPasswordHasher>();
 
         // Ensure the database is clean before each test
         CleanDatabaseAsync().Wait();
@@ -37,14 +42,14 @@ public abstract class BaseIntegrationTest
 
     private async Task CleanDatabaseAsync()
     {
-        DbContext.Users.RemoveRange(DbContext.Users);
-        await DbContext.SaveChangesAsync();
+        _dbContext.Users.RemoveRange(_dbContext.Users);
+        await _dbContext.SaveChangesAsync();
     }
 
     public void Dispose()
     {
         _scope?.Dispose();
-        DbContext?.Dispose();
+        _dbContext?.Dispose();
         _httpClient?.Dispose();
     }
 }

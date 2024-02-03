@@ -1,4 +1,4 @@
-﻿using GymManagement.Infrastructure.Authentication.PasswordHasher;
+﻿using UserServiceApp.Infrastructure.Authentication.PasswordHasher;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

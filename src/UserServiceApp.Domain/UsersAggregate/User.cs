@@ -53,8 +53,7 @@ public class User : AggregateRoot
     }
 
     public void UpdateUserData(string userName,
-        string fullName,
-        string email,
+        string newFullName,
         string mobileNumber,
         string newCulture,
         string newLanguage,
@@ -63,8 +62,7 @@ public class User : AggregateRoot
         string? newPassword = null)
     {
         Username = userName;
-        FullName = fullName;
-        Email = email;
+        FullName = newFullName;
         MobileNumber = mobileNumber;
         Culture = newCulture;
         Language = newLanguage;

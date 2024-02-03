@@ -109,7 +109,6 @@ internal class UserService(IUsersRepository _usersRepository,
         user.UpdateUserData(
             request.UserName,
             request.FullName,
-            request.Email,
             request.MobileNumber,
             culture.Name,
             culture.EnglishName,

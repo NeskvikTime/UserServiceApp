@@ -1,8 +1,8 @@
 ﻿namespace UserServiceApp.Contracts.Users;
 public record UpdateUserRequest(
-    string UserName,
-    string FullName,
+    string NewUserName,
+    string NewFullName,
     string Email,
-    string MobileNumber,
+    string NewMobileNumber,
     bool isAdmin = false,
     string? NewPassword = null);
