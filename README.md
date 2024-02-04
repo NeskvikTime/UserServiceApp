@@ -57,4 +57,8 @@ To retrieve user data (get or getAll), a valid Bearer token is required in the r
 
 When registering a new user, the culture will be taken from the client's local machine automatically. It can be changed later by the administrator with the update endpoint, passed in headers as the NewUserCulture query parameter.
 
+# 7. Logging
+
+Log files are stored inside directory: C:/Temp/UserServiceAppLogs
+
 Enjoy using the app! :)
