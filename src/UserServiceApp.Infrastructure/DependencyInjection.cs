@@ -1,5 +1,4 @@
-﻿using UserServiceApp.Infrastructure.Authentication.PasswordHasher;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +8,7 @@ using System.Text;
 using UserServiceApp.Application.Common.Interfaces;
 using UserServiceApp.Contracts.Common.Interfaces;
 using UserServiceApp.Domain.Common.Interfaces;
+using UserServiceApp.Infrastructure.Authentication.PasswordHasher;
 using UserServiceApp.Infrastructure.Authentication.TokenGenerator;
 using UserServiceApp.Infrastructure.Persistance;
 using UserServiceApp.Infrastructure.Persistance.Repositories;
@@ -26,6 +26,7 @@ public static class DependencyInjection
 
         services.AddSingleton(Options.Create(jwtSettings));
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+
         services.AddSingleton<IPasswordHasher, PasswordHasher>();
 
         services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)

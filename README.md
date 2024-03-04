@@ -46,6 +46,7 @@ Ensure Docker is running on your machine during all types of testing (API and in
 
 A default admin user is created with the following credentials:
 
+Email: admin@localhost
 Username: admin
 Password: Admin-1234!
 

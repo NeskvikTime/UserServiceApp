@@ -12,6 +12,7 @@ namespace UserServiceApp.API.Controllers;
 
 [Route("v1/[controller]")]
 [ApiController]
+[Authorize]
 public class UsersController(ISender _sender) : ControllerBase
 {
     [HttpGet("getAll")]
