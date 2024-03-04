@@ -8,6 +8,7 @@ services:
   db:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: UserServiceAppDB
+    restart: always
     environment:
       - ACCEPT_EULA=true
       - MSSQL_SA_PASSWORD=Pass@word
