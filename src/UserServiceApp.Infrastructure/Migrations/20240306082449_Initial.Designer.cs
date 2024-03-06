@@ -12,7 +12,7 @@ using UserServiceApp.Infrastructure.Persistance;
 namespace UserServiceApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240202170805_Initial")]
+    [Migration("20240306082449_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -72,28 +72,34 @@ namespace UserServiceApp.Infrastructure.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Id", "Email");
+                    SqlServerKeyBuilderExtensions.IsClustered(b.HasKey("Id"), false);
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8b708975-1493-4201-9101-d614d50c64df"),
+                            Id = new Guid("d62f1b78-be75-46ad-90a0-7ca90fbf1783"),
                             Culture = "en-US",
-                            DateCreated = new DateTime(2024, 2, 2, 17, 8, 5, 322, DateTimeKind.Utc).AddTicks(7006),
-                            DateModified = new DateTime(2024, 2, 2, 17, 8, 5, 322, DateTimeKind.Utc).AddTicks(7006),
+                            DateCreated = new DateTime(2024, 3, 6, 8, 24, 48, 761, DateTimeKind.Utc).AddTicks(7226),
+                            DateModified = new DateTime(2024, 3, 6, 8, 24, 48, 761, DateTimeKind.Utc).AddTicks(7226),
                             Email = "admin@localhost",
                             FullName = "Admin",
                             IsAdmin = true,
                             Language = "English",
                             MobileNumber = "+65467891324586",
                             Password = "*****************",
-                            PasswordHash = "$2a$11$66w6KHRgEJLxQExVzMZfF.8RLuXeDg9XT4KgXaMfD/cO0/5a0JQtW",
+                            PasswordHash = "$2a$11$TNqLrYMHucOFu1qy5X9A2eokQU.EiY.R7q1IZUdYIFbaLhEbTiBOu",
                             Username = "admin"
                         });
                 });

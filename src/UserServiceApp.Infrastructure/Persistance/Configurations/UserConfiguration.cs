@@ -7,12 +7,14 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.HasKey(x => x.Id);
+        builder.HasKey(x => x.Id)
+            .IsClustered(false);
 
-        builder.HasIndex(x => new { x.Id, x.Email });
+        builder.HasIndex(x => x.Email)
+            .IsUnique();
 
-        builder.Property(x => x.Username)
-            .IsRequired();
+        builder.HasIndex(x => x.Username)
+            .IsUnique();
 
         builder.Property(x => x.FullName)
             .IsRequired();

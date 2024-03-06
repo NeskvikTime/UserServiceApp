@@ -16,7 +16,7 @@ namespace UserServiceApp.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     MobileNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -30,18 +30,26 @@ namespace UserServiceApp.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id)
+                        .Annotation("SqlServer:Clustered", false);
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Culture", "DateCreated", "DateModified", "Email", "FullName", "IsAdmin", "Language", "MobileNumber", "Password", "PasswordHash", "Username" },
-                values: new object[] { new Guid("8b708975-1493-4201-9101-d614d50c64df"), "en-US", new DateTime(2024, 2, 2, 17, 8, 5, 322, DateTimeKind.Utc).AddTicks(7006), new DateTime(2024, 2, 2, 17, 8, 5, 322, DateTimeKind.Utc).AddTicks(7006), "admin@localhost", "Admin", true, "English", "+65467891324586", "*****************", "$2a$11$66w6KHRgEJLxQExVzMZfF.8RLuXeDg9XT4KgXaMfD/cO0/5a0JQtW", "admin" });
+                values: new object[] { new Guid("d62f1b78-be75-46ad-90a0-7ca90fbf1783"), "en-US", new DateTime(2024, 3, 6, 8, 24, 48, 761, DateTimeKind.Utc).AddTicks(7226), new DateTime(2024, 3, 6, 8, 24, 48, 761, DateTimeKind.Utc).AddTicks(7226), "admin@localhost", "Admin", true, "English", "+65467891324586", "*****************", "$2a$11$TNqLrYMHucOFu1qy5X9A2eokQU.EiY.R7q1IZUdYIFbaLhEbTiBOu", "admin" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_Id_Email",
+                name: "IX_Users_Email",
                 table: "Users",
-                columns: new[] { "Id", "Email" });
+                column: "Email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Username",
+                table: "Users",
+                column: "Username",
+                unique: true);
         }
 
         /// <inheritdoc />
