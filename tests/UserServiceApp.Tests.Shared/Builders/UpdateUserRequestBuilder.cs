@@ -1,7 +1,7 @@
-﻿using TestCommon.Common.Interfaces;
+﻿using UserServiceApp.Tests.Shared.Common.Interfaces;
 using UserServiceApp.Contracts.Users;
 
-namespace TestCommon.Builders;
+namespace UserServiceApp.Tests.Shared.Builders;
 public class UpdateUserRequestBuilder : IBuilder<UpdateUserRequest>
 {
     private string _userName = "defaultUser";

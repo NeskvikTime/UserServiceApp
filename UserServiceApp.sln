@@ -17,16 +17,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserServiceApp.Infrastructu
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserServiceApp.Contracts", "src\UserServiceApp.Contracts\UserServiceApp.Contracts.csproj", "{31EADDE2-0500-4A18-987B-EF8F86A7AA66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserServiceApp.API.IntegrationTests", "tests\UserServiceApp.API.IntegrationTests\UserServiceApp.API.IntegrationTests.csproj", "{6DD04F4F-9741-4DC0-9BF4-8AE847E6E80F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserServiceApp.API.IntegrationTests", "tests\UserServiceApp.API.IntegrationTests\UserServiceApp.API.IntegrationTests.csproj", "{6DD04F4F-9741-4DC0-9BF4-8AE847E6E80F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserServiceApp.Application.UnitTests", "tests\UserServiceApp.Application.UnitTests\UserServiceApp.Application.UnitTests.csproj", "{8FA39367-F5B8-4659-A2C6-1B407E8097AA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCommon", "tests\TestCommon\TestCommon.csproj", "{4ED4AB61-8362-4D61-8311-8FF491DC41DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserServiceApp.Application.UnitTests", "tests\UserServiceApp.Application.UnitTests\UserServiceApp.Application.UnitTests.csproj", "{8FA39367-F5B8-4659-A2C6-1B407E8097AA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{37C6BE82-D70B-4B1A-B51F-60B241D64B30}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserServiceApp.Tests.Shared", "tests\UserServiceApp.Tests.Shared\UserServiceApp.Tests.Shared.csproj", "{7C609B46-CE14-421D-BE8B-458D752D20F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,10 +62,10 @@ Global
 		{8FA39367-F5B8-4659-A2C6-1B407E8097AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FA39367-F5B8-4659-A2C6-1B407E8097AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FA39367-F5B8-4659-A2C6-1B407E8097AA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4ED4AB61-8362-4D61-8311-8FF491DC41DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4ED4AB61-8362-4D61-8311-8FF491DC41DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4ED4AB61-8362-4D61-8311-8FF491DC41DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4ED4AB61-8362-4D61-8311-8FF491DC41DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C609B46-CE14-421D-BE8B-458D752D20F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C609B46-CE14-421D-BE8B-458D752D20F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C609B46-CE14-421D-BE8B-458D752D20F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C609B46-CE14-421D-BE8B-458D752D20F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,7 +78,7 @@ Global
 		{31EADDE2-0500-4A18-987B-EF8F86A7AA66} = {C9594C54-9696-49A3-BA5F-B87C62257432}
 		{6DD04F4F-9741-4DC0-9BF4-8AE847E6E80F} = {8F278986-1C3B-4A41-8343-09423664E62E}
 		{8FA39367-F5B8-4659-A2C6-1B407E8097AA} = {8F278986-1C3B-4A41-8343-09423664E62E}
-		{4ED4AB61-8362-4D61-8311-8FF491DC41DE} = {8F278986-1C3B-4A41-8343-09423664E62E}
+		{7C609B46-CE14-421D-BE8B-458D752D20F4} = {8F278986-1C3B-4A41-8343-09423664E62E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A0C67BA8-D2B2-4325-AD9C-5E746BDAAA09}

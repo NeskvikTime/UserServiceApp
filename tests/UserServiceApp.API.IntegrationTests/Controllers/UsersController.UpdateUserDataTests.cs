@@ -1,9 +1,9 @@
 ﻿using FluentAssertions;
 using System.Net;
 using System.Net.Http.Json;
-using TestCommon.Builders;
-using TestCommon.Common;
-using TestCommon.Extensions;
+using UserServiceApp.Tests.Shared.Builders;
+using UserServiceApp.Tests.Shared.Common;
+using UserServiceApp.Tests.Shared.Extensions;
 using UserServiceApp.Contracts.Common;
 using UserServiceApp.Contracts.Users;
 

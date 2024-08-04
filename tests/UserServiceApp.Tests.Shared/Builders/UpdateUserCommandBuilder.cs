@@ -1,6 +1,6 @@
 ﻿using UserServiceApp.Application.Users.UpdateUserData;
 
-namespace TestCommon.Builders;
+namespace UserServiceApp.Tests.Shared.Builders;
 public class UpdateUserCommandBuilder
 {
     private Guid _userId = Guid.NewGuid();

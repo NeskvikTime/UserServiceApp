@@ -1,4 +1,4 @@
-﻿namespace TestCommon.Extensions;
+﻿namespace UserServiceApp.Tests.Shared.Extensions;
 
 public static class RequestHeaderExtensions
 {

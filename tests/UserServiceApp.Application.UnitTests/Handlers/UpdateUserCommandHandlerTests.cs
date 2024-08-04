@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using MediatR;
 using NSubstitute;
-using TestCommon.Builders;
+using UserServiceApp.Tests.Shared.Builders;
 using UserServiceApp.Application.Common.Interfaces;
 using UserServiceApp.Application.Users.UpdateUserData;
 using UserServiceApp.Contracts.Users;

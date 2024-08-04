@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using FluentValidation.TestHelper;
 using NSubstitute;
-using TestCommon.Builders;
+using UserServiceApp.Tests.Shared.Builders;
 using UserServiceApp.Application.Common.Interfaces;
 using UserServiceApp.Application.Users.DeleteUser;
 using UserServiceApp.Domain.Exceptions;

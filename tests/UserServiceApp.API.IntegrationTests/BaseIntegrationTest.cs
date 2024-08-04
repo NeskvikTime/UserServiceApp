@@ -8,9 +8,8 @@ using UserServiceApp.Contracts.Common;
 using UserServiceApp.Contracts.Users;
 using UserServiceApp.Domain.Common.Interfaces;
 using UserServiceApp.Infrastructure.Persistance;
-using Xunit;
 
-namespace TestCommon.Common;
+namespace UserServiceApp.API.IntegrationTests;
 public abstract class BaseIntegrationTest
     : IClassFixture<ApplicationApiFactory>,
       IDisposable

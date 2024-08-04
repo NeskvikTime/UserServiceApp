@@ -8,16 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="8.0.1" />
     <PackageReference Include="NSubstitute" Version="5.1.0" />
-    <PackageReference Include="Testcontainers" Version="3.7.0" />
-    <PackageReference Include="Testcontainers.MsSql" Version="3.7.0" />
-    <PackageReference Include="xunit" Version="2.6.6" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\UserServiceApp.API\UserServiceApp.API.csproj" />
+    <ProjectReference Include="..\..\src\UserServiceApp.Application\UserServiceApp.Application.csproj" />
     <ProjectReference Include="..\..\src\UserServiceApp.Contracts\UserServiceApp.Contracts.csproj" />
     <ProjectReference Include="..\..\src\UserServiceApp.Domain\UserServiceApp.Domain.csproj" />
     <ProjectReference Include="..\..\src\UserServiceApp.Infrastructure\UserServiceApp.Infrastructure.csproj" />

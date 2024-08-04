@@ -1,7 +1,7 @@
-﻿using TestCommon.Common.Interfaces;
+﻿using UserServiceApp.Tests.Shared.Common.Interfaces;
 using UserServiceApp.Domain.UsersAggregate;
 
-namespace TestCommon.Builders;
+namespace UserServiceApp.Tests.Shared.Builders;
 public class UserBuilder : IBuilder<User>
 {
     private Guid _id = Guid.NewGuid();

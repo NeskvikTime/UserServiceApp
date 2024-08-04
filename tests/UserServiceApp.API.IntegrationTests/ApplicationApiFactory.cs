@@ -7,11 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Testcontainers.MsSql;
-using UserServiceApp.API;
 using UserServiceApp.Infrastructure.Persistance;
-using Xunit;
 
-namespace TestCommon.Common;
+namespace UserServiceApp.API.IntegrationTests;
 public class ApplicationApiFactory : WebApplicationFactory<AssemblyMarker>, IAsyncLifetime
 {
     private readonly MsSqlContainer _dbContainer =
