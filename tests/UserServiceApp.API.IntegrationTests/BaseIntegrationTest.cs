@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Net;
 using System.Net.Http.Json;
 using UserServiceApp.Application.Common.Interfaces;
@@ -15,39 +16,22 @@ public abstract class BaseIntegrationTest
       IDisposable
 {
     private readonly IServiceScope _scope;
-    protected readonly HttpClient _httpClient;
     protected readonly ISender _sender;
-    protected readonly IUsersRepository _userRepository;
-    protected readonly IUnitOfWork _unitOfWork;
-    protected readonly IPasswordHasher _passwordHasher;
-
     internal readonly ApplicationDbContext _dbContext;
+    protected readonly Func<Task> _resetDatabase;
+    protected readonly HttpClient _httpClient;
 
     public BaseIntegrationTest(ApplicationApiFactory factory)
     {
         _scope = factory.Services.CreateScope();
 
-        _httpClient = factory.CreateClient();
-
         _sender = _scope.ServiceProvider.GetRequiredService<ISender>();
-        _userRepository = _scope.ServiceProvider.GetRequiredService<IUsersRepository>();
-        _unitOfWork = _scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+        _httpClient = factory.CreateClient();
 
         _dbContext = _scope.ServiceProvider
             .GetRequiredService<ApplicationDbContext>();
 
-        _passwordHasher = _scope.ServiceProvider
-            .GetRequiredService<IPasswordHasher>();
-
-        // Ensure the database is clean before each test
-        CleanDatabaseAsync().Wait();
-    }
-
-
-    private async Task CleanDatabaseAsync()
-    {
-        _dbContext.Users.RemoveRange(_dbContext.Users.Where(user => user.Username != "Admin"));
-        await _dbContext.SaveChangesAsync();
+        _resetDatabase = factory.ResetdatabaseAsync;
     }
 
     public void Dispose()
