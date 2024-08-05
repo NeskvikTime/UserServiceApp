@@ -31,14 +31,13 @@ public abstract class BaseIntegrationTest
         _dbContext = _scope.ServiceProvider
             .GetRequiredService<ApplicationDbContext>();
 
-        _resetDatabase = factory.ResetdatabaseAsync;
+        _resetDatabase = factory.ResetDatabaseAsync;
     }
 
     public void Dispose()
     {
         _scope?.Dispose();
         _dbContext?.Dispose();
-        _httpClient?.Dispose();
     }
 
     public async Task<AuthenticationResult> LoginAdminAsync(CancellationToken cancellationToken)

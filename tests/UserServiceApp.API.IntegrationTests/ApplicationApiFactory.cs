@@ -9,68 +9,95 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Data.Common;
-using System;
 using Testcontainers.MsSql;
 using UserServiceApp.Infrastructure.Persistance;
 using Respawn;
+using DotNet.Testcontainers.Builders;
 
 namespace UserServiceApp.API.IntegrationTests;
+
 public class ApplicationApiFactory : WebApplicationFactory<AssemblyMarker>, IAsyncLifetime
 {
-    private readonly MsSqlContainer _dbContainer =
-        new MsSqlBuilder()
-            .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
-            .WithPassword("Pass@word")
-            .Build();
-
+    private readonly MsSqlContainer _dbContainer;
     private DbConnection _dbConnection = default!;
     private Respawner _respawner = default!;
 
+    public ApplicationApiFactory()
+    {
+        _dbContainer = new MsSqlBuilder()
+            .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
+            .WithPassword("Pass@word123!") 
+            .WithEnvironment("ACCEPT_EULA", "Y")
+            .WithPortBinding(1433, true)
+            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(1433))
+            .Build();
+    }
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.UseConfiguration(new ConfigurationBuilder()
-            .AddUserSecrets<ApplicationApiFactory>()
-            .Build());
+        builder.ConfigureAppConfiguration(config =>
+        {
+            config.AddUserSecrets<ApplicationApiFactory>();
+        });
 
         builder.ConfigureLogging(logging =>
         {
             logging.ClearProviders();
+            logging.AddConsole();
         });
 
         builder.ConfigureTestServices(services =>
         {
-            services.RemoveAll(typeof(IHostedService));
-            services.RemoveAll(typeof(ApplicationDbContext));
+            services.RemoveAll<IHostedService>();
+            services.RemoveAll<ApplicationDbContext>();
+            services.RemoveAll<DbContextOptions<ApplicationDbContext>>();
+            services.RemoveAll<DbConnection>();
 
-            services.Remove(services.SingleOrDefault(service
-                => typeof(DbContextOptions<ApplicationDbContext>) == service.ServiceType)!);
-
-            services.Remove(services.SingleOrDefault(service
-                => typeof(DbConnection) == service.ServiceType)!);
-
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(_dbContainer.GetConnectionString()));
+            services.AddDbContext<ApplicationDbContext>((sp, options) =>
+            {
+                var connectionString = _dbContainer.GetConnectionString();
+                options.UseSqlServer(connectionString);
+            });
         });
 
-        builder.UseEnvironment(Environments.Development);
+        builder.UseEnvironment("Development");
     }
 
     public async Task InitializeAsync()
     {
         await _dbContainer.StartAsync();
-        _dbConnection = new SqlConnection(_dbContainer.GetConnectionString());
-        await _dbConnection.OpenAsync();
+
+        var retryCount = 0;
+        const int maxRetries = 10;
+
+        while (retryCount < maxRetries)
+        {
+            try
+            {
+                _dbConnection = new SqlConnection(_dbContainer.GetConnectionString());
+                await _dbConnection.OpenAsync();
+                break;
+            }
+            catch (SqlException)
+            {
+                retryCount++;
+                if (retryCount == maxRetries)
+                    throw;
+                await Task.Delay(1000);
+            }
+        }
+
         await InitializeRespawner();
     }
 
-    public async Task ResetdatabaseAsync()
+    public async Task ResetDatabaseAsync()
     {
         await _respawner.ResetAsync(_dbConnection);
     }
 
     private async Task InitializeRespawner()
     {
-        _respawner = await Respawner.CreateAsync(_dbConnection, new RespawnerOptions()
+        _respawner = await Respawner.CreateAsync(_dbConnection, new RespawnerOptions
         {
             DbAdapter = DbAdapter.SqlServer,
             SchemasToInclude = new[] { "dbo" }
@@ -79,7 +106,9 @@ public class ApplicationApiFactory : WebApplicationFactory<AssemblyMarker>, IAsy
 
     public new async Task DisposeAsync()
     {
+        await base.DisposeAsync();
+        if (_dbConnection != null)
+            await _dbConnection.DisposeAsync();
         await _dbContainer.DisposeAsync();
     }
 }
-

@@ -12,6 +12,6 @@ services:
       - ACCEPT_EULA=true
       - MSSQL_SA_PASSWORD=Pass@word
     ports:
-      - '5444:1433'
+      - '5444:1435'
     volumes:
     - sqldb-data:/var/opt/mssql
