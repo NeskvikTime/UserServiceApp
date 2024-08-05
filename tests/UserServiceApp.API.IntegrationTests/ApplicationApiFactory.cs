@@ -107,8 +107,10 @@ public class ApplicationApiFactory : WebApplicationFactory<AssemblyMarker>, IAsy
     public new async Task DisposeAsync()
     {
         await base.DisposeAsync();
-        if (_dbConnection != null)
+        if (_dbConnection is not null)
+        {
             await _dbConnection.DisposeAsync();
+        }
         await _dbContainer.DisposeAsync();
     }
 }
