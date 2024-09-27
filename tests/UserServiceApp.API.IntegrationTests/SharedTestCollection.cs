@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace UserServiceApp.API.IntegrationTests;
 
-namespace UserServiceApp.API.IntegrationTests;
-
-[CollectionDefinition("Test collection")]
+[CollectionDefinition("UserCollection")]
 public class SharedTestCollection : ICollectionFixture<ApplicationApiFactory>
 {
 

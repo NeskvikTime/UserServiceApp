@@ -13,25 +13,32 @@ using Testcontainers.MsSql;
 using UserServiceApp.Infrastructure.Persistance;
 using Respawn;
 using DotNet.Testcontainers.Builders;
+using UserServiceApp.Application.Common.Interfaces;
+using UserServiceApp.Infrastructure.Authentication.PasswordHasher;
+using UserServiceApp.Domain.Common.Interfaces;
 
 namespace UserServiceApp.API.IntegrationTests;
 
 public class ApplicationApiFactory : WebApplicationFactory<AssemblyMarker>, IAsyncLifetime
 {
-    private readonly MsSqlContainer _dbContainer;
     private DbConnection _dbConnection = default!;
     private Respawner _respawner = default!;
 
-    public ApplicationApiFactory()
-    {
-        _dbContainer = new MsSqlBuilder()
-            .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
-            .WithPassword("Pass@word123!") 
-            .WithEnvironment("ACCEPT_EULA", "Y")
-            .WithPortBinding(1433, true)
-            .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(1433))
-            .Build();
-    }
+    public HttpClient HttpClient { get; private set; } = default!;
+    public IUsersRepository UserRepository { get; private set; } = default!;
+    public IUnitOfWork UnitOfWork { get; private set; } = default!;
+    public IPasswordHasher PasswordHasher { get; private set; } = default!;
+
+    private IServiceScope? _scope;
+
+
+    private MsSqlContainer _dbContainer = new MsSqlBuilder()
+        .WithImage("mcr.microsoft.com/mssql/server:2022-latest")
+        .WithPassword("Pass@word123!")
+        .WithEnvironment("ACCEPT_EULA", "Y")
+        .WithPortBinding(1433, true)
+        .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(1433))
+        .Build();
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -66,26 +73,36 @@ public class ApplicationApiFactory : WebApplicationFactory<AssemblyMarker>, IAsy
     public async Task InitializeAsync()
     {
         await _dbContainer.StartAsync();
+        HttpClient = CreateClient();
 
-        var retryCount = 0;
-        const int maxRetries = 10;
+        _scope = Services.CreateScope();
+        UserRepository = _scope.ServiceProvider.GetRequiredService<IUsersRepository>();
+        UnitOfWork = _scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+        PasswordHasher = _scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
 
-        while (retryCount < maxRetries)
-        {
-            try
-            {
-                _dbConnection = new SqlConnection(_dbContainer.GetConnectionString());
-                await _dbConnection.OpenAsync();
-                break;
-            }
-            catch (SqlException)
-            {
-                retryCount++;
-                if (retryCount == maxRetries)
-                    throw;
-                await Task.Delay(1000);
-            }
-        }
+        _dbConnection = new SqlConnection(_dbContainer.GetConnectionString());
+        await _dbConnection.OpenAsync();
+
+
+        //var retryCount = 0;
+        //const int maxRetries = 10;
+
+        //while (retryCount < maxRetries)
+        //{
+        //    try
+        //    {
+        //        _dbConnection = new SqlConnection(_dbContainer.GetConnectionString());
+        //        await _dbConnection.OpenAsync();
+        //        break;
+        //    }
+        //    catch (SqlException)
+        //    {
+        //        retryCount++;
+        //        if (retryCount == maxRetries)
+        //            throw;
+        //        await Task.Delay(1000);
+        //    }
+        //}
 
         await InitializeRespawner();
     }
@@ -112,5 +129,6 @@ public class ApplicationApiFactory : WebApplicationFactory<AssemblyMarker>, IAsy
             await _dbConnection.DisposeAsync();
         }
         await _dbContainer.DisposeAsync();
+        _scope?.Dispose();
     }
 }

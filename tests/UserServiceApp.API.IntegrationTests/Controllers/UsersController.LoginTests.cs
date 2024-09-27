@@ -6,83 +6,114 @@ using UserServiceApp.Tests.Shared.Common;
 using UserServiceApp.Contracts.Common;
 using UserServiceApp.Contracts.Users;
 using UserServiceApp.Domain.UsersAggregate;
+using UserServiceApp.Infrastructure.Authentication.PasswordHasher;
+using UserServiceApp.Application.Common.Interfaces;
+using UserServiceApp.Domain.Common.Interfaces;
+using Bogus;
 
 namespace UserServiceApp.API.IntegrationTests.Controllers;
-public class LoginAsyncTests : BaseIntegrationTest
+
+[Collection("UserCollection")]
+public class LoginAsyncTests : IAsyncLifetime
 {
     private const string UrlPath = "/v1/users/login";
 
-    public LoginAsyncTests(ApplicationApiFactory factory) : base(factory)
+    private readonly HttpClient _httpClient;
+    private readonly Func<Task> _resetDatabase;
+
+    private readonly IUsersRepository _userRepository;
+    private readonly IUnitOfWork _unitOfWork;
+
+    private readonly IPasswordHasher _passwordHasher;
+
+    private readonly Faker<User> _userFaker;
+
+    public LoginAsyncTests(ApplicationApiFactory applicationApiFactory)
     {
+        _httpClient = applicationApiFactory.HttpClient;
+        _resetDatabase = applicationApiFactory.ResetDatabaseAsync;
+
+        _userRepository = applicationApiFactory.UserRepository;
+        _unitOfWork = applicationApiFactory.UnitOfWork;
+        _passwordHasher = applicationApiFactory.PasswordHasher;
+
+        _userFaker = new Faker<User>()
+         .CustomInstantiator(f => new User(
+             f.Person.UserName,
+             f.Person.FullName,
+             f.Internet.Email(),
+             f.Phone.PhoneNumber(),
+             f.Random.Word(),
+             f.Locale))
+         .RuleFor(u => u.Id, f => f.Random.Guid());
     }
 
-    //[Fact]
-    //public async Task Login_WithValidCredentials_ReturnsOkWithUserResponse()
-    //{
-    //    // Arrange
-    //    string userPasswor = "TestPassword123#";
-    //    string hashedPassword = _passwordHasher.HashPassword(userPasswor);
+    public Task DisposeAsync() => _resetDatabase();
 
-    //    User newUser = new UserBuilder()
-    //        .WithUsername("testUser")
-    //        .WithFullName("Test User")
-    //        .WithEmail("test@example.com")
-    //        .WithMobileNumber("+1234567890")
-    //        .WithLanguage("English")
-    //        .WithCulture("en-US")
-    //        .Build();
+    public Task InitializeAsync() => Task.CompletedTask;
 
-    //    newUser.AssignPasswordHash(hashedPassword);
+    [Fact]
+    public async Task Login_WithValidCredentials_ReturnsOkWithUserResponse()
+    {
+        // Arrange
+        string userPassword = "TestPassword123#";
+        string hashedPassword = _passwordHasher.HashPassword(userPassword);
 
-    //    CancellationToken cancellationToken = CancellationToken.None;
+        User newUser = _userFaker.Generate();
+        newUser.AssignPasswordHash(hashedPassword);
 
-    //    await _userRepository.AddAsync(newUser, cancellationToken);
-    //    await _unitOfWork.SaveChangesAsync();
+        CancellationToken cancellationToken = CancellationToken.None;
 
-    //    var loginRequest = new LoginRequest(newUser.Email, userPasswor);
+        await _userRepository.AddAsync(newUser, cancellationToken);
+        await _unitOfWork.SaveChangesAsync();
 
-    //    _dbContext.Users.Should().ContainEquivalentOf(newUser);
+        var loginRequest = new LoginRequest(newUser.Email, userPassword);
 
-    //    // Act
-    //    var response = await _httpClient.PostAsJsonAsync(UrlPath, loginRequest, cancellationToken);
+        var newUserFromRepo = await _userRepository.GetByIdAsync(newUser.Id, cancellationToken);
 
-    //    // Assert
-    //    response.StatusCode.Should().Be(HttpStatusCode.OK);
-    //    var userResponse = await response.Content.ReadFromJsonAsync<AuthenticationResult>();
-    //    userResponse.Should().NotBeNull();
-    //    userResponse?.UserResponse.Email.Should().Be(newUser.Email);
-    //    userResponse?.Token.Should().NotBeNullOrWhiteSpace();
-    //}
+        newUserFromRepo.Should().NotBeNull();
+        newUserFromRepo.Should().BeEquivalentTo(newUser);
 
-    //[Fact]
-    //public async Task Login_WithInvalidCredentials_ReturnsUnauthorized()
-    //{
-    //    // Arrange
-    //    User newUser = new UserBuilder()
-    //        .WithUsername("invalidCredsUser")
-    //        .WithFullName("Invalid User")
-    //        .WithEmail("invalid@example.com")
-    //        .WithMobileNumber("+19876543210")
-    //        .WithLanguage("English")
-    //        .WithCulture("en-US")
-    //        .Build();
+        // Act
+        var response = await _httpClient.PostAsJsonAsync(UrlPath, loginRequest, cancellationToken);
 
-    //    string userPasswor = "TestPassword123#";
-    //    string wrongPassword = "WrongPassword123#";
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        var userResponse = await response.Content.ReadFromJsonAsync<AuthenticationResult>();
+        userResponse.Should().NotBeNull();
+        userResponse?.UserResponse.Email.Should().Be(newUser.Email);
+        userResponse?.Token.Should().NotBeNullOrWhiteSpace();
+    }
 
-    //    newUser.AssignPasswordHash(_passwordHasher.HashPassword(userPasswor));
+    [Fact]
+    public async Task Login_WithInvalidCredentials_ReturnsUnauthorized()
+    {
+        // Arrange
+        string correctPassword = "TestPassword123#";
+        string wrongPassword = "WrongPassword123#";
+        string hashedPassword = _passwordHasher.HashPassword(correctPassword);
 
-    //    await _userRepository.AddAsync(newUser, CancellationToken.None);
-    //    await _unitOfWork.SaveChangesAsync();
+        User newUser = _userFaker.Generate();
+        newUser.AssignPasswordHash(hashedPassword);
 
-    //    var loginRequest = new LoginRequest(newUser.Email, wrongPassword);
+        CancellationToken cancellationToken = CancellationToken.None;
 
-    //    // Act
-    //    var response = await _httpClient.PostAsJsonAsync(UrlPath, loginRequest);
+        await _userRepository.AddAsync(newUser, cancellationToken);
+        await _unitOfWork.SaveChangesAsync();
 
-    //    // Assert
-    //    response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-    //}
+        var loginRequest = new LoginRequest(newUser.Email, wrongPassword);
+
+        var newUserFromRepo = await _userRepository.GetByIdAsync(newUser.Id, cancellationToken);
+
+        newUserFromRepo.Should().NotBeNull();
+        newUserFromRepo.Should().BeEquivalentTo(newUser);
+
+        // Act
+        var response = await _httpClient.PostAsJsonAsync(UrlPath, loginRequest, cancellationToken);
+
+        // Assert
+        response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+    }
 
     [Fact]
     public async Task Login_NonExistentUser_ReturnsUnauthorized()
