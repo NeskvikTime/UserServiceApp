@@ -18,7 +18,6 @@ public class RegisterUserTests : IAsyncLifetime
     private readonly HttpClient _httpClient;
     private readonly Func<Task> _resetDatabase;
     private readonly ApplicationApiFactory _factory;
-    private readonly ITestOutputHelper _output;
 
     public RegisterUserTests(ApplicationApiFactory factory)
     {
@@ -55,7 +54,12 @@ public class RegisterUserTests : IAsyncLifetime
     public async Task RegisterUser_WithValidData_ReturnsOkWithUserResponse()
     {
         // Arrange
-        var registerRequest = _generateRegisterUserRequest();
+        var registerRequest = new RegisterUserRequest(
+            "newUser",
+            "New User",
+            "newuser@example.com",
+            "+1234567890",
+            "ValidPassword123#");
 
         // Act
         var response = await _httpClient.PostAsJsonAsync(UrlPath, registerRequest, CancellationToken.None);
@@ -70,15 +74,12 @@ public class RegisterUserTests : IAsyncLifetime
         userResponse.UserResponse.FullName.Should().Be(registerRequest.FullName);
         userResponse.UserResponse.Username.Should().Be(registerRequest.UserName);
         userResponse.UserResponse.MobileNumber.Should().Be(registerRequest.MobileNumber);
-
-        await _resetDatabase();
     }
 
     [Fact]
     public async Task RegisterUser_WithDuplicateEmail_ReturnsBadRequest()
     {
-        // Arrange
-        var existingUser = _generateRegisterUserRequest();
+          var existingUser = _generateRegisterUserRequest();
         await _httpClient.PostAsJsonAsync(UrlPath, existingUser, CancellationToken.None);
 
         var duplicateEmailRequest = _generateRegisterUserRequest();
@@ -89,8 +90,6 @@ public class RegisterUserTests : IAsyncLifetime
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-
-        await _resetDatabase();
     }
 
     [Fact]
@@ -105,7 +104,5 @@ public class RegisterUserTests : IAsyncLifetime
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
-
-        await _resetDatabase();
     }
 }
