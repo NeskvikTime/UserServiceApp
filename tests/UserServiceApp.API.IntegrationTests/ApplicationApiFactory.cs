@@ -83,27 +83,6 @@ public class ApplicationApiFactory : WebApplicationFactory<AssemblyMarker>, IAsy
         _dbConnection = new SqlConnection(_dbContainer.GetConnectionString());
         await _dbConnection.OpenAsync();
 
-
-        //var retryCount = 0;
-        //const int maxRetries = 10;
-
-        //while (retryCount < maxRetries)
-        //{
-        //    try
-        //    {
-        //        _dbConnection = new SqlConnection(_dbContainer.GetConnectionString());
-        //        await _dbConnection.OpenAsync();
-        //        break;
-        //    }
-        //    catch (SqlException)
-        //    {
-        //        retryCount++;
-        //        if (retryCount == maxRetries)
-        //            throw;
-        //        await Task.Delay(1000);
-        //    }
-        //}
-
         await InitializeRespawner();
     }
 
