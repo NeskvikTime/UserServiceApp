@@ -2,6 +2,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using UserServiceApp.Application.Common.Interfaces;
 using UserServiceApp.Domain.UsersAggregate;
@@ -40,6 +41,11 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public string GenerateRefreshToken()
+    {
+        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
     }
 
     private static void AddRoles(User user, List<Claim> claims)

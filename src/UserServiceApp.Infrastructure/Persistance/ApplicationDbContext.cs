@@ -3,8 +3,8 @@
 using System.Reflection;
 
 using UserServiceApp.Application.Common.Interfaces;
+using UserServiceApp.Domain;
 using UserServiceApp.Domain.UsersAggregate;
-using UserServiceApp.Infrastructure.Persistance.Configurations;
 
 namespace UserServiceApp.Infrastructure.Persistance;
 internal class ApplicationDbContext : DbContext, IDbInitializer
@@ -15,6 +15,8 @@ internal class ApplicationDbContext : DbContext, IDbInitializer
     }
 
     public DbSet<User> Users => Set<User>();
+
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
     public void Migrate()
     {

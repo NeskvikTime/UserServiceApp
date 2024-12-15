@@ -68,7 +68,7 @@ public class User : AggregateRoot
         Language = newLanguage;
         IsAdmin = isAdmin;
 
-        if (!string.IsNullOrEmpty(newPassword))
+        if (!string.IsNullOrWhiteSpace(newPassword))
         {
             Password = newPassword;
             PasswordHash = passwordHasher.HashPassword(newPassword);
