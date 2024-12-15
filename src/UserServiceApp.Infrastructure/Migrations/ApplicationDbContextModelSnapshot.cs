@@ -17,7 +17,7 @@ namespace UserServiceApp.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.1")
+                .HasAnnotation("ProductVersion", "9.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -86,17 +86,17 @@ namespace UserServiceApp.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("d62f1b78-be75-46ad-90a0-7ca90fbf1783"),
+                            Id = new Guid("a044e109-7782-4f78-b753-18febec8f383"),
                             Culture = "en-US",
-                            DateCreated = new DateTime(2024, 3, 6, 8, 24, 48, 761, DateTimeKind.Utc).AddTicks(7226),
-                            DateModified = new DateTime(2024, 3, 6, 8, 24, 48, 761, DateTimeKind.Utc).AddTicks(7226),
+                            DateCreated = new DateTime(2024, 12, 15, 11, 59, 58, 639, DateTimeKind.Utc).AddTicks(9749),
+                            DateModified = new DateTime(2024, 12, 15, 11, 59, 58, 639, DateTimeKind.Utc).AddTicks(9749),
                             Email = "admin@localhost",
                             FullName = "Admin",
                             IsAdmin = true,
                             Language = "English",
                             MobileNumber = "+65467891324586",
                             Password = "*****************",
-                            PasswordHash = "$2a$11$TNqLrYMHucOFu1qy5X9A2eokQU.EiY.R7q1IZUdYIFbaLhEbTiBOu",
+                            PasswordHash = "$2a$11$r72ohlRsT0WgSAfNkcsFcOJNdjgl3nZguF41tL2Md0xX3ha16xh8W",
                             Username = "admin"
                         });
                 });

@@ -50,6 +50,8 @@ public static class DependencyInjection
         {
             options.UseSqlServer(configuration.GetConnectionString("MyDbContext"))
                 .AddInterceptors(serviceProvider.GetRequiredService<SaveChangesInterceptor>());
+            options.ConfigureWarnings(warn => warn.Ignore(
+                Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
         });
 
         services.AddScoped<IDbInitializer, ApplicationDbContext>();
