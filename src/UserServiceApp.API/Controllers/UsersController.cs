@@ -10,14 +10,14 @@ using UserServiceApp.Contracts.Users;
 
 namespace UserServiceApp.API.Controllers;
 
-[Route("v1/[controller]")]
-[ApiController]
+[Route("v1/users")]
+[ApiController()]
 [Authorize]
 public class UsersController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
 
-    [HttpGet("GetAll")]
+    [HttpGet("getAll")]
     public async Task<IActionResult> GetAllUserDatas(CancellationToken cancellationToken)
     {
         var query = new GetUserDatasQuery(null);
@@ -27,7 +27,7 @@ public class UsersController(ISender sender) : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("Get/{userId:guid}")]
+    [HttpGet("get/{userId:guid}")]
     public async Task<IActionResult> GetUserData([FromRoute] Guid userId, CancellationToken cancellationToken)
     {
         var query = new GetUserDatasQuery(userId);
@@ -37,7 +37,7 @@ public class UsersController(ISender sender) : ControllerBase
         return Ok(result);
     }
 
-    [HttpPut("Update/{userId:guid}")]
+    [HttpPut("update/{userId:guid}")]
     public async Task<IActionResult> UpdateUserData(
         [FromRoute] Guid userId,
         UpdateUserRequest request,
@@ -58,7 +58,7 @@ public class UsersController(ISender sender) : ControllerBase
     }
 
     [AllowAnonymous]
-    [HttpPost("Register")]
+    [HttpPost("register")]
     public async Task<IActionResult> RegisterUser(RegisterUserRequest request)
     {
         var command = new RegisterUserCommand(
@@ -73,7 +73,7 @@ public class UsersController(ISender sender) : ControllerBase
     }
 
     [AllowAnonymous]
-    [HttpPost("Login")]
+    [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest request)
     {
         var command = new LoginUserCommand(request.Email, request.Password);
@@ -82,7 +82,7 @@ public class UsersController(ISender sender) : ControllerBase
         return Ok(result);
     }
 
-    [HttpDelete("Delete/{userId:guid}")]
+    [HttpDelete("delete/{userId:guid}")]
     public async Task<IActionResult> DeleteUser(Guid userId)
     {
         var request = new DeleteUserCommand(userId);
