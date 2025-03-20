@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UserServiceApp.Domain.UsersAggregate;
 
-namespace UserServiceApp.Infrastructure.Persistance;
+namespace UserServiceApp.Infrastructure.Persistence;
 public static class DataGenerator
 {
     public static ModelBuilder SeedDataToInitialMigration(this ModelBuilder modelBuilder)

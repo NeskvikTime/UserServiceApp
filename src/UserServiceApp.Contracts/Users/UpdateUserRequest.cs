@@ -1,4 +1,5 @@
 ﻿namespace UserServiceApp.Contracts.Users;
+
 public record UpdateUserRequest(
     string NewUserName,
     string NewFullName,

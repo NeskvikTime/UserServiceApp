@@ -1,6 +1,6 @@
 ﻿using UserServiceApp.Application.Common.Interfaces;
 
-namespace UserServiceApp.Infrastructure.Persistance;
+namespace UserServiceApp.Infrastructure.Persistence;
 internal class UnitOfWork : IUnitOfWork
 {
     private readonly ApplicationDbContext _dbContext;

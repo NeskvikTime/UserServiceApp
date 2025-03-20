@@ -4,8 +4,10 @@ using UserServiceApp.Contracts.Users;
 using UserServiceApp.Domain.UsersAggregate;
 
 namespace UserServiceApp.Application.Users.UpdateUserData;
-public class UpdateUserCommandHandler(IUserService _userService) : IRequestHandler<UpdateUserCommand, UserResponse>
+public class UpdateUserCommandHandler(IUserService userService)
+    : IRequestHandler<UpdateUserCommand, UserResponse>
 {
+    private readonly IUserService _userService = userService;
 
     public async Task<UserResponse> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {

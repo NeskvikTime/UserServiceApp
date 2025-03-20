@@ -20,7 +20,7 @@ public class UsersController(ISender sender) : ControllerBase
     [HttpGet("getAll")]
     public async Task<IActionResult> GetAllUserDatas(CancellationToken cancellationToken)
     {
-        var query = new GetUserDatasQuery(null);
+        var query = new GetUserDataQuery(null);
 
         var result = await _sender.Send(query, cancellationToken);
 
@@ -30,7 +30,7 @@ public class UsersController(ISender sender) : ControllerBase
     [HttpGet("get/{userId:guid}")]
     public async Task<IActionResult> GetUserData([FromRoute] Guid userId, CancellationToken cancellationToken)
     {
-        var query = new GetUserDatasQuery(userId);
+        var query = new GetUserDataQuery(userId);
 
         var result = await _sender.Send(query, cancellationToken);
 

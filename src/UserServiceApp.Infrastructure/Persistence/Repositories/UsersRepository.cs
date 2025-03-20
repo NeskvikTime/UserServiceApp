@@ -2,7 +2,7 @@
 using UserServiceApp.Application.Common.Interfaces;
 using UserServiceApp.Domain.UsersAggregate;
 
-namespace UserServiceApp.Infrastructure.Persistance.Repositories;
+namespace UserServiceApp.Infrastructure.Persistence.Repositories;
 internal class UsersRepository(ApplicationDbContext _dbContext) : IUsersRepository
 {
     public async Task AddAsync(User user, CancellationToken cancellationToken)

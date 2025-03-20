@@ -1,10 +1,9 @@
-﻿using FluentAssertions;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Json;
-using UserServiceApp.Tests.Shared.Common;
-using UserServiceApp.Tests.Shared.Extensions;
+using FluentAssertions;
 using UserServiceApp.Contracts.Common;
 using UserServiceApp.Contracts.Users;
+using UserServiceApp.Tests.Shared.Extensions;
 
 namespace UserServiceApp.API.IntegrationTests.Controllers;
 public class GetAllUserDataTests : BaseIntegrationTest
@@ -45,7 +44,7 @@ public class GetAllUserDataTests : BaseIntegrationTest
         getAllResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         var usersResponse = await getAllResponse.Content.ReadFromJsonAsync<List<UserResponse>>(cancellationToken);
         usersResponse.Should().NotBeNull();
-        usersResponse.Count().Should().BeGreaterOrEqualTo(2);
+        usersResponse.Count().Should().BeGreaterThan(2);
 
         usersResponse.Should().ContainSingle(u => u.Id == firstUser.UserResponse.Id);
         usersResponse.Should().ContainSingle(u => u.Id == secondUser.UserResponse.Id);

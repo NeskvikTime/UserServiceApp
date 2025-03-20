@@ -11,7 +11,7 @@ namespace UserServiceApp.Application.UnitTests.Handlers;
 public class GetUserDatasQueryHandlerTests
 {
     private readonly IUserService _userService = Substitute.For<IUserService>();
-    private readonly IRequestHandler<GetUserDatasQuery, List<UserResponse>> _handler;
+    private readonly IRequestHandler<GetUserDataQuery, List<UserResponse>> _handler;
 
     public GetUserDatasQueryHandlerTests()
     {
@@ -37,9 +37,9 @@ public class GetUserDatasQueryHandlerTests
 
         List<User> users = [user];
 
-        _userService.GetUserDatasAsync(Arg.Any<Guid?>(), Arg.Any<CancellationToken>()).Returns(users);
+        _userService.GetUsersAsync(Arg.Any<Guid?>(), Arg.Any<CancellationToken>()).Returns(users);
 
-        var query = new GetUserDatasQuery(userId);
+        var query = new GetUserDataQuery(userId);
 
         // Act
         var result = await _handler.Handle(query, CancellationToken.None);
@@ -77,9 +77,9 @@ public class GetUserDatasQueryHandlerTests
 
         List<User> users = [user];
 
-        _userService.GetUserDatasAsync(Arg.Any<Guid?>(), Arg.Any<CancellationToken>()).Returns(users);
+        _userService.GetUsersAsync(Arg.Any<Guid?>(), Arg.Any<CancellationToken>()).Returns(users);
 
-        var query = new GetUserDatasQuery(user.Id);
+        var query = new GetUserDataQuery(user.Id);
 
         // Act
         var result = await _handler.Handle(query, CancellationToken.None);

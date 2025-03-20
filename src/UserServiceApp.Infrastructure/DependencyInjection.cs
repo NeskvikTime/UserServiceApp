@@ -1,17 +1,17 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using UserServiceApp.Application.Common.Interfaces;
 using UserServiceApp.Contracts.Common.Interfaces;
 using UserServiceApp.Domain.Common.Interfaces;
 using UserServiceApp.Infrastructure.Authentication.PasswordHasher;
 using UserServiceApp.Infrastructure.Authentication.TokenGenerator;
-using UserServiceApp.Infrastructure.Persistance;
-using UserServiceApp.Infrastructure.Persistance.Repositories;
+using UserServiceApp.Infrastructure.Persistence;
+using UserServiceApp.Infrastructure.Persistence.Repositories;
 using UserServiceApp.Infrastructure.Services;
 
 namespace UserServiceApp.Infrastructure;

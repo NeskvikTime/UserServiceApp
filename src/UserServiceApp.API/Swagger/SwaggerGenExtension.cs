@@ -7,29 +7,30 @@ public static class SwaggerGenExtension
 {
     public static SwaggerGenOptions ConfigureSwaggerGenOptions(this SwaggerGenOptions options)
     {
-        options.SwaggerDoc("v1", new OpenApiInfo { Title = "UserServiceApp.API", Version = "v1" });
-
-        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        options.SwaggerDoc("v1", new OpenApiInfo
         {
-            Description = $"JWT Authorization header using the Bearer scheme. \r\n\r\nEnter 'Bearer' [space] and then your token in the text input below. \r\n\r\nExample: 'Bearer 12345abcdef'",
-            Name = "Authorization",
-            In = ParameterLocation.Header,
-            Type = SecuritySchemeType.ApiKey,
-            Scheme = "Bearer"
+            Title = "UserServiceApp.API",
+            Version = "v1",
+            Description = "API documentation for UserServiceApp",
         });
+
+        options.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
+        {
+            Type = SecuritySchemeType.Http,
+            Scheme = "bearer",
+            BearerFormat = "JWT",
+            Description = "JWT Authorization header using the Bearer scheme."
+        });
+
 
         options.AddSecurityRequirement(new OpenApiSecurityRequirement
         {
             {
                 new OpenApiSecurityScheme
                 {
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "Bearer"
-                    }
+                    Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearerAuth" }
                 },
-                Array.Empty<string>()
+                new string[] {}
             }
         });
 
