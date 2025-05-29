@@ -19,6 +19,7 @@ public static class DependencyInjection
         services.AddOpenApi();
         //services.AddSwaggerGen(options => options.ConfigureSwaggerGenOptions());
 
+        // Add ProblemDetails and custom exception handler
         services.AddProblemDetails(options =>
         {
             options.CustomizeProblemDetails = context =>
@@ -33,8 +34,6 @@ public static class DependencyInjection
 
         services.AddHttpContextAccessor();
         services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
-
-        // Add ProblemDetails and custom exception handler
 
         services.AddExceptionHandler<CustomExceptionHandler>();
 
