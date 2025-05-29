@@ -34,7 +34,7 @@ public class GetAllUserDataTests : BaseIntegrationTest
             "+3987654321",
             cancellationToken);
 
-        var getAllUrl = "/v1/users/getAll";
+        var getAllUrl = "/v1/users/get-all";
 
         // Act
         _httpClient.AddAuthorizationHeader(authAdminInfo.Token);
@@ -57,7 +57,7 @@ public class GetAllUserDataTests : BaseIntegrationTest
         CancellationToken cancellationToken = CancellationToken.None;
         AuthenticationResult authAdminInfo = await base.LoginAdminAsync(cancellationToken);
 
-        var getAllUrl = "/v1/users/getAll";
+        var getAllUrl = "/v1/users/get-all";
 
         // Act
         _httpClient.AddAuthorizationHeader(authAdminInfo.Token);
