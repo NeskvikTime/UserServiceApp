@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using UserServiceApp.Contracts.Common.Interfaces;
 using UserServiceApp.Domain.Common;
 
-namespace UserServiceApp.Infrastructure.Persistance;
+namespace UserServiceApp.Infrastructure.Persistence;
 
 public class SaveChangesInterceptor(
     IDateTimeProvider _dateTimeProvider) : ISaveChangesInterceptor

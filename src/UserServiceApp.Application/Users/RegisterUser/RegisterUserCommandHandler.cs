@@ -5,9 +5,12 @@ using UserServiceApp.Contracts.Users;
 using UserServiceApp.Domain.UsersAggregate;
 
 namespace UserServiceApp.Application.Users.RegisterUser;
-public class RegisterUserCommandHandler(IUserService _userService, IJwtTokenGenerator _jwtTokenGenerator)
+public class RegisterUserCommandHandler(IUserService userService, IJwtTokenGenerator jwtTokenGenerator)
     : IRequestHandler<RegisterUserCommand, AuthenticationResult>
 {
+    private readonly IUserService _userService = userService;
+    private readonly IJwtTokenGenerator _jwtTokenGenerator = jwtTokenGenerator;
+
     public async Task<AuthenticationResult> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
     {
         User user = await _userService.RegisterUserAsync(request, cancellationToken);

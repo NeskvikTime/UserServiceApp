@@ -1,15 +1,17 @@
-using MediatR;
 using System.Reflection;
+using MediatR;
 using UserServiceApp.Application.Common.Authorization;
 using UserServiceApp.Application.Common.Interfaces;
 using UserServiceApp.Domain.Exceptions;
 
 namespace UserServiceApp.Application.Common.Behaviors;
 
-public class AuthorizationBehavior<TRequest, TResponse>(ICurrentUserProvider _currentUserProvider)
+public class AuthorizationBehavior<TRequest, TResponse>(ICurrentUserProvider currentUserProvider)
     : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
 {
+    private readonly ICurrentUserProvider _currentUserProvider = currentUserProvider;
+
     public async Task<TResponse> Handle(
         TRequest request,
         RequestHandlerDelegate<TResponse> next,

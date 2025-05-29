@@ -8,7 +8,7 @@ using UserServiceApp.Application.Common.Interfaces;
 using UserServiceApp.Contracts.Common;
 using UserServiceApp.Contracts.Users;
 using UserServiceApp.Domain.Common.Interfaces;
-using UserServiceApp.Infrastructure.Persistance;
+using UserServiceApp.Infrastructure.Persistence;
 
 namespace UserServiceApp.API.IntegrationTests;
 public abstract class BaseIntegrationTest

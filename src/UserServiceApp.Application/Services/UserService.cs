@@ -8,11 +8,17 @@ using UserServiceApp.Domain.UsersAggregate;
 
 namespace UserServiceApp.Application.Services;
 
-internal class UserService(IUsersRepository _usersRepository,
-    UserPreferences _userPreferences,
-    IUnitOfWork _unitOfWork,
-    IPasswordHasher _passwordHasher) : IUserService
+internal class UserService(IUsersRepository usersRepository,
+    UserPreferences userPreferences,
+    IUnitOfWork unitOfWork,
+    IPasswordHasher passwordHasher) : IUserService
 {
+    private readonly IUsersRepository _usersRepository = usersRepository;
+    private readonly UserPreferences _userPreferences = userPreferences;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IPasswordHasher _passwordHasher = passwordHasher;
+
+
     public async Task DeleteUserAsync(Guid userId, CancellationToken cancellationToken)
     {
         var user = await _usersRepository.GetByIdAsync(userId, cancellationToken);
@@ -26,7 +32,7 @@ internal class UserService(IUsersRepository _usersRepository,
         await _unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<List<User>> GetUserDatasAsync(Guid? userId, CancellationToken cancellationToken)
+    public async Task<List<User>> GetUsersAsync(Guid? userId, CancellationToken cancellationToken)
     {
         List<User> users = new List<User>();
 
@@ -68,7 +74,7 @@ internal class UserService(IUsersRepository _usersRepository,
 
     public async Task<User> RegisterUserAsync(RegisterUserCommand command, CancellationToken cancellationToken)
     {
-        string hahsedPassword = _passwordHasher.HashPassword(command.Password);
+        string hashedPassword = _passwordHasher.HashPassword(command.Password);
 
         var user = new User(
             command.UserName,
@@ -78,7 +84,7 @@ internal class UserService(IUsersRepository _usersRepository,
             _userPreferences.UserCulture,
             _userPreferences.UserLanguage);
 
-        user.AssignPasswordHash(hahsedPassword);
+        user.AssignPasswordHash(hashedPassword);
 
         await _usersRepository.AddAsync(user, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

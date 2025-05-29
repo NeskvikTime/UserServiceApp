@@ -5,4 +5,12 @@ public class AuthorizationException : Exception
     {
 
     }
+
+    public AuthorizationException() : base()
+    {
+    }
+
+    public AuthorizationException(string? message, Exception? innerException) : base(message, innerException)
+    {
+    }
 }

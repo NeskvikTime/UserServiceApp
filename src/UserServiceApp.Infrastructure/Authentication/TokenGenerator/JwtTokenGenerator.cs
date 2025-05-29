@@ -1,21 +1,16 @@
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using UserServiceApp.Application.Common.Interfaces;
 using UserServiceApp.Domain.UsersAggregate;
 
 namespace UserServiceApp.Infrastructure.Authentication.TokenGenerator;
 
-public class JwtTokenGenerator : IJwtTokenGenerator
+public class JwtTokenGenerator(IOptions<JwtSettings> jwtOptions) : IJwtTokenGenerator
 {
-    private readonly JwtSettings _jwtSettings;
-
-    public JwtTokenGenerator(IOptions<JwtSettings> jwtOptions)
-    {
-        _jwtSettings = jwtOptions.Value;
-    }
+    private readonly JwtSettings _jwtSettings = jwtOptions.Value;
 
     public string GenerateToken(User user)
     {

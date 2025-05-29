@@ -10,7 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Data.Common;
 using Testcontainers.MsSql;
-using UserServiceApp.Infrastructure.Persistance;
+using UserServiceApp.Infrastructure.Persistence;
 using Respawn;
 using DotNet.Testcontainers.Builders;
 using UserServiceApp.Application.Common.Interfaces;

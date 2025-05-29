@@ -4,9 +4,9 @@ using System.Reflection;
 
 using UserServiceApp.Application.Common.Interfaces;
 using UserServiceApp.Domain.UsersAggregate;
-using UserServiceApp.Infrastructure.Persistance.Configurations;
+using UserServiceApp.Infrastructure.Persistence.Configurations;
 
-namespace UserServiceApp.Infrastructure.Persistance;
+namespace UserServiceApp.Infrastructure.Persistence;
 internal class ApplicationDbContext : DbContext, IDbInitializer
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
