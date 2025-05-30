@@ -1,6 +1,5 @@
 using Serilog;
 using UserServiceApp.API;
-using UserServiceApp.API.Endpoints;
 using UserServiceApp.API.Middleware;
 using UserServiceApp.Application;
 using UserServiceApp.Infrastructure;
@@ -42,12 +41,10 @@ app.UseHttpsRedirection();
 app.UseExceptionHandler();
 app.UseStatusCodePages();
 
-app.UseAuthorization();
-
-// Map controllers for backward compatibility (optional - can be removed once fully migrated to minimal APIs)
-app.MapControllers();
 
 // Map minimal API endpoints
-app.MapUserEndpoints();
+app.MapEndpoints();
+
+app.UseAuthorization();
 
 app.Run();

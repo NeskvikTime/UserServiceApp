@@ -1,14 +1,15 @@
 using MediatR;
+using UserServiceApp.API.Interfaces;
 using UserServiceApp.Application.Users.UpdateUserData;
 using UserServiceApp.Contracts.Users;
 
 namespace UserServiceApp.API.Endpoints.Users;
 
-public static class UpdateUserEndpoint
+public class UpdateUserEndpoint : IEndpoint
 {
-    public static IEndpointRouteBuilder MapUpdateUserEndpoint(this IEndpointRouteBuilder usersGroup)
+    public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        usersGroup.MapPut("update/{userId:guid}", async (
+        app.MapPut("v1/users/update/{userId:guid}", async (
             Guid userId,
             UpdateUserRequest request,
             ISender sender,
@@ -33,9 +34,9 @@ public static class UpdateUserEndpoint
             var result = await sender.Send(command, CancellationToken.None);
             return Results.Ok(result);
         })
+        .WithGroupName("v1/users")
         .RequireAuthorization()
         .WithName("UpdateUser")
         .WithSummary("Update a user's data");
-        return usersGroup;
     }
 }

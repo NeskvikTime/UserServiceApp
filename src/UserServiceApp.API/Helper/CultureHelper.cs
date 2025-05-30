@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.Primitives;
-using System.Globalization;
+﻿using System.Globalization;
+using Microsoft.Extensions.Primitives;
 
 namespace UserServiceApp.API.Helper;
 
@@ -14,7 +14,7 @@ public static class CultureHelper
 
         string? culture = stringValues.First();
 
-        if (string.IsNullOrEmpty(culture))
+        if (string.IsNullOrWhiteSpace(culture))
         {
             return CultureInfo.CurrentCulture;
         }

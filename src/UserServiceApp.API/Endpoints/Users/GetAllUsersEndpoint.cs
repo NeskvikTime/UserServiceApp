@@ -1,13 +1,14 @@
 using MediatR;
+using UserServiceApp.API.Interfaces;
 using UserServiceApp.Application.Users.GetUserDatas;
 
 namespace UserServiceApp.API.Endpoints.Users;
 
-public static class GetAllUsersEndpoint
+public class GetAllUsersEndpoint : IEndpoint
 {
-    public static IEndpointRouteBuilder MapGetAllUsersEndpoint(this IEndpointRouteBuilder usersGroup)
+    public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        usersGroup.MapGet("get-all", async (ISender sender, CancellationToken cancellationToken) =>
+        app.MapGet("v1/users/get-all", async (ISender sender, CancellationToken cancellationToken) =>
         {
             var query = new GetUserDataQuery(null);
             var result = await sender.Send(query, cancellationToken);
@@ -16,6 +17,5 @@ public static class GetAllUsersEndpoint
         .RequireAuthorization()
         .WithName("GetAllUsers")
         .WithSummary("Get all user data");
-        return usersGroup;
     }
 }

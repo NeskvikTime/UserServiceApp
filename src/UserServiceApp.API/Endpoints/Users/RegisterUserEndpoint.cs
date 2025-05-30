@@ -1,14 +1,15 @@
 using MediatR;
+using UserServiceApp.API.Interfaces;
 using UserServiceApp.Application.Users.RegisterUser;
 using UserServiceApp.Contracts.Users;
 
 namespace UserServiceApp.API.Endpoints.Users;
 
-public static class RegisterUserEndpoint
+public class RegisterUserEndpoint : IEndpoint
 {
-    public static IEndpointRouteBuilder MapRegisterUserEndpoint(this IEndpointRouteBuilder usersGroup)
+    public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        usersGroup.MapPost("register", async (RegisterUserRequest request, ISender sender) =>
+        app.MapPost("v1/users/register", async (RegisterUserRequest request, ISender sender) =>
         {
             var command = new RegisterUserCommand(
                 request.UserName,
@@ -23,6 +24,5 @@ public static class RegisterUserEndpoint
         .AllowAnonymous()
         .WithName("RegisterUser")
         .WithSummary("Register a new user");
-        return usersGroup;
     }
 }

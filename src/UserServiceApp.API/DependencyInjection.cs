@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics;
+using System.Reflection;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using UserServiceApp.API.ExceptionHandling;
-using UserServiceApp.API.Filters;
+using UserServiceApp.API.Interfaces;
 using UserServiceApp.Application.Common.Interfaces;
 using UserServiceApp.Application.Services;
 
@@ -10,13 +12,15 @@ public static class DependencyInjection
 {
     public static IServiceCollection RegisterApiServices(this IServiceCollection services)
     {
-        services.AddControllers(cfg =>
-        {
-            cfg.Filters.Add(typeof(LogActionParametersFilter));
-        });
+        //services.AddControllers(cfg =>
+        //{
+        //    cfg.Filters.Add(typeof(LogActionParametersFilter));
+        //});
 
         services.AddEndpointsApiExplorer();
         services.AddOpenApi();
+        services.AddAuthorization();
+        services.AddEndpoints(typeof(DependencyInjection).Assembly);
         //services.AddSwaggerGen(options => options.ConfigureSwaggerGenOptions());
 
         // Add ProblemDetails and custom exception handler
@@ -36,6 +40,40 @@ public static class DependencyInjection
         services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
 
         services.AddExceptionHandler<CustomExceptionHandler>();
+
+        return services;
+    }
+
+    public static IApplicationBuilder MapEndpoints(
+        this WebApplication app,
+        RouteGroupBuilder? routeGroupBuilder = null)
+    {
+        IEnumerable<IEndpoint> endpoints = app.Services
+            .GetRequiredService<IEnumerable<IEndpoint>>();
+
+        IEndpointRouteBuilder builder =
+            routeGroupBuilder is null ? app : routeGroupBuilder;
+
+        foreach (IEndpoint endpoint in endpoints)
+        {
+            endpoint.MapEndpoint(builder);
+        }
+
+        return app;
+    }
+
+    private static IServiceCollection AddEndpoints(
+        this IServiceCollection services,
+        Assembly assembly)
+    {
+        ServiceDescriptor[] serviceDescriptors = assembly
+            .DefinedTypes
+            .Where(type => type is { IsAbstract: false, IsInterface: false } &&
+                           type.IsAssignableTo(typeof(IEndpoint)))
+            .Select(type => ServiceDescriptor.Transient(typeof(IEndpoint), type))
+            .ToArray();
+
+        services.TryAddEnumerable(serviceDescriptors);
 
         return services;
     }
