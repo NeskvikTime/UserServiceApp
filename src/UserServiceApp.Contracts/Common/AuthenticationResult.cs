@@ -4,15 +4,18 @@ namespace UserServiceApp.Contracts.Common;
 
 public record AuthenticationResult
 {
-    public AuthenticationResult(UserResponse userResponse, string token)
+    public AuthenticationResult(UserResponse userResponse, string token, string refreshToken = null)
     {
         UserResponse = userResponse;
         Token = token;
+        RefreshToken = refreshToken;
     }
 
     public UserResponse UserResponse { get; set; }
 
     public string Token { get; set; }
+
+    public string? RefreshToken { get; set; } = null;
 
     public static AuthenticationResponse MapToAuthResponse(AuthenticationResult authResult)
     {

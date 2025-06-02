@@ -12,10 +12,12 @@ public class GetAllUsersEndpoint : IEndpoint
         {
             var query = new GetUserDataQuery(null);
             var result = await sender.Send(query, cancellationToken);
+
             return Results.Ok(result);
         })
         .RequireAuthorization()
         .WithName("GetAllUsers")
-        .WithSummary("Get all user data");
+        .WithSummary("Get all user data")
+        .WithOpenApi();
     }
 }

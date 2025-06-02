@@ -14,9 +14,10 @@ public class DeleteUserEndpoint : IEndpoint
             await sender.Send(request, CancellationToken.None);
             return Results.NoContent();
         })
-        .WithGroupName("v1/users")
         .RequireAuthorization()
         .WithName("DeleteUser")
-        .WithSummary("Delete a user");
+        .WithSummary("Delete a user")
+        .Produces(StatusCodes.Status204NoContent)
+        .WithOpenApi();
     }
 }

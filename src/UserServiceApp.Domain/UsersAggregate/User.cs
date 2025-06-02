@@ -42,7 +42,7 @@ public class User : AggregateRoot
         IsAdmin = isAdmin;
     }
 
-    public bool CheckPasswordAsync(string password, IPasswordHasher passwordHasher)
+    public bool CheckPassword(string password, IPasswordHasher passwordHasher)
     {
         return passwordHasher.IsCorrectPassword(password, PasswordHash);
     }

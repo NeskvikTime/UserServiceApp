@@ -16,6 +16,7 @@ public class GetUserEndpoint : IEndpoint
         })
         .RequireAuthorization()
         .WithName("GetUser")
-        .WithSummary("Get a specific user's data");
+        .WithSummary("Get a specific user's data")
+        .WithOpenApi();
     }
 }

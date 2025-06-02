@@ -1,21 +1,23 @@
 ﻿using FluentAssertions;
 using MediatR;
 using NSubstitute;
-using UserServiceApp.Tests.Shared.Builders;
 using UserServiceApp.Application.Common.Interfaces;
 using UserServiceApp.Application.Users.Login;
 using UserServiceApp.Contracts.Common;
+using UserServiceApp.Domain.Common.Interfaces;
+using UserServiceApp.Tests.Shared.Builders;
 
 namespace UserServiceApp.Application.UnitTests.Handlers;
 public class LoginUserCommandHandlerTests
 {
     private readonly IUserService _userService = Substitute.For<IUserService>();
     private readonly IJwtTokenGenerator _jwtTokenGenerator = Substitute.For<IJwtTokenGenerator>();
+    private readonly IUnitOfWork _unitOfWork = Substitute.For<IUnitOfWork>(); // Added missing dependency
     private readonly IRequestHandler<LoginUserCommand, AuthenticationResult> _handler;
 
     public LoginUserCommandHandlerTests()
     {
-        _handler = new LoginUserCommandHandler(_userService, _jwtTokenGenerator);
+        _handler = new LoginUserCommandHandler(_userService, Substitute.For<IRefreshTokenRepository>(), _unitOfWork, _jwtTokenGenerator);
     }
 
     [Fact]

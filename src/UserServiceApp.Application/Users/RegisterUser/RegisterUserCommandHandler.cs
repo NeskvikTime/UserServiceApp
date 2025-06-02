@@ -5,7 +5,9 @@ using UserServiceApp.Contracts.Users;
 using UserServiceApp.Domain.UsersAggregate;
 
 namespace UserServiceApp.Application.Users.RegisterUser;
-public class RegisterUserCommandHandler(IUserService userService, IJwtTokenGenerator jwtTokenGenerator)
+public class RegisterUserCommandHandler(
+    IUserService userService,
+    IJwtTokenGenerator jwtTokenGenerator)
     : IRequestHandler<RegisterUserCommand, AuthenticationResult>
 {
     private readonly IUserService _userService = userService;
@@ -27,7 +29,11 @@ public class RegisterUserCommandHandler(IUserService userService, IJwtTokenGener
             user.Culture,
             user.IsAdmin);
 
-        return new AuthenticationResult(userResponse, token);
-    }
+        var refreshToken = new RefreshToken(
+            _jwtTokenGenerator.GenerateRefreshToken(),
+            user.Id,
+            DateTime.UtcNow.AddDays(7));
 
+        return new AuthenticationResult(userResponse, token, refreshToken.Value);
+    }
 }

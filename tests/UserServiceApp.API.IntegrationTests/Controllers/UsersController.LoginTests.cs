@@ -1,15 +1,12 @@
-﻿using FluentAssertions;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Json;
-using UserServiceApp.Tests.Shared.Builders;
-using UserServiceApp.Tests.Shared.Common;
+using Bogus;
+using FluentAssertions;
+using UserServiceApp.Application.Common.Interfaces;
 using UserServiceApp.Contracts.Common;
 using UserServiceApp.Contracts.Users;
-using UserServiceApp.Domain.UsersAggregate;
-using UserServiceApp.Infrastructure.Authentication.PasswordHasher;
-using UserServiceApp.Application.Common.Interfaces;
 using UserServiceApp.Domain.Common.Interfaces;
-using Bogus;
+using UserServiceApp.Domain.UsersAggregate;
 
 namespace UserServiceApp.API.IntegrationTests.Controllers;
 

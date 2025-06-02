@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -47,5 +48,10 @@ public class JwtTokenGenerator(IOptions<JwtSettings> jwtOptions) : IJwtTokenGene
 
         // User is not admin, so add the user role
         claims.Add(new Claim("roles", "User"));
+    }
+
+    public string GenerateRefreshToken()
+    {
+        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
     }
 }
