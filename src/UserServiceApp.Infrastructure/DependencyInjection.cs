@@ -56,6 +56,7 @@ public static class DependencyInjection
 
         services.AddScoped<IDbInitializer, ApplicationDbContext>();
         services.AddScoped<IUsersRepository, UsersRepository>();
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;

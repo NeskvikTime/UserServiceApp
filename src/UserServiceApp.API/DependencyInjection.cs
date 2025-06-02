@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using UserServiceApp.API.ExceptionHandling;
 using UserServiceApp.API.Interfaces;
+using UserServiceApp.API.Swagger;
 using UserServiceApp.Application.Common.Interfaces;
 using UserServiceApp.Application.Services;
 
@@ -18,10 +19,11 @@ public static class DependencyInjection
         //});
 
         services.AddEndpointsApiExplorer();
-        services.AddOpenApi();
+        services.AddSwaggerGen(options => options.ConfigureSwaggerGenOptions());
         services.AddAuthorization();
+
         services.AddEndpoints(typeof(DependencyInjection).Assembly);
-        //services.AddSwaggerGen(options => options.ConfigureSwaggerGenOptions());
+
 
         // Add ProblemDetails and custom exception handler
         services.AddProblemDetails(options =>
@@ -44,6 +46,22 @@ public static class DependencyInjection
         return services;
     }
 
+    private static IServiceCollection AddEndpoints(
+        this IServiceCollection services,
+        Assembly assembly)
+    {
+        ServiceDescriptor[] serviceDescriptors = assembly
+            .DefinedTypes
+            .Where(type => type is { IsAbstract: false, IsInterface: false } &&
+                           type.IsAssignableTo(typeof(IEndpoint)))
+            .Select(type => ServiceDescriptor.Transient(typeof(IEndpoint), type))
+            .ToArray();
+
+        services.TryAddEnumerable(serviceDescriptors);
+
+        return services;
+    }
+
     public static IApplicationBuilder MapEndpoints(
         this WebApplication app,
         RouteGroupBuilder? routeGroupBuilder = null)
@@ -60,21 +78,5 @@ public static class DependencyInjection
         }
 
         return app;
-    }
-
-    private static IServiceCollection AddEndpoints(
-        this IServiceCollection services,
-        Assembly assembly)
-    {
-        ServiceDescriptor[] serviceDescriptors = assembly
-            .DefinedTypes
-            .Where(type => type is { IsAbstract: false, IsInterface: false } &&
-                           type.IsAssignableTo(typeof(IEndpoint)))
-            .Select(type => ServiceDescriptor.Transient(typeof(IEndpoint), type))
-            .ToArray();
-
-        services.TryAddEnumerable(serviceDescriptors);
-
-        return services;
     }
 }

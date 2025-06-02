@@ -23,6 +23,7 @@ public class RegisterUserEndpoint : IEndpoint
         })
         .AllowAnonymous()
         .WithName("RegisterUser")
-        .WithSummary("Register a new user");
+        .WithSummary("Register a new user")
+        .WithOpenApi();
     }
 }

@@ -34,9 +34,9 @@ public class UpdateUserEndpoint : IEndpoint
             var result = await sender.Send(command, CancellationToken.None);
             return Results.Ok(result);
         })
-        .WithGroupName("v1/users")
         .RequireAuthorization()
         .WithName("UpdateUser")
-        .WithSummary("Update a user's data");
+        .WithSummary("Update a user's data")
+        .WithOpenApi();
     }
 }

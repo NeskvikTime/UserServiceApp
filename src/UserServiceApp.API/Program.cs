@@ -26,8 +26,8 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
-    app.UseSwaggerUI(options => options.SwaggerEndpoint("/openapi/v1.json", "UserServiceApp.Api"));
+    app.UseSwagger();
+    app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "UserServiceApp.Api"));
 }
 
 app.UseSerilogRequestLogging();
@@ -40,7 +40,6 @@ app.UseHttpsRedirection();
 // Add exception handler and status code pages
 app.UseExceptionHandler();
 app.UseStatusCodePages();
-
 
 // Map minimal API endpoints
 app.MapEndpoints();

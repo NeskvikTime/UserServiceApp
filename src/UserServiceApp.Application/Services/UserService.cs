@@ -62,7 +62,7 @@ internal class UserService(IUsersRepository usersRepository,
             throw new AuthorizationException("Wrong username or password.");
         }
 
-        bool isPasswordValid = user.CheckPasswordAsync(password, _passwordHasher);
+        bool isPasswordValid = user.CheckPassword(password, _passwordHasher);
 
         if (!isPasswordValid)
         {
