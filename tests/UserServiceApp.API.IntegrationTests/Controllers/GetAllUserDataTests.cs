@@ -5,7 +5,7 @@ using UserServiceApp.Contracts.Common;
 using UserServiceApp.Contracts.Users;
 using UserServiceApp.Tests.Shared.Extensions;
 
-namespace UserServiceApp.API.IntegrationTests.Controllers;
+namespace UserServiceApp.API.IntegrationTests.Endpoints;
 public class GetAllUserDataTests : BaseIntegrationTest
 {
     public GetAllUserDataTests(ApplicationApiFactory factory) : base(factory)

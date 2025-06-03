@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace UserServiceApp.Application.Users.Login;
+namespace UserServiceApp.Application.Users.LoginWithRefreshToken;
 public class LoginWithRefreshTokenCommandValidator : AbstractValidator<LoginWithRefreshTokenCommand>
 {
     public LoginWithRefreshTokenCommandValidator()

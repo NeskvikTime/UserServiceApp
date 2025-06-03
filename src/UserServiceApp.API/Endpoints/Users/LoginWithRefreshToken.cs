@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using UserServiceApp.API.Interfaces;
-using UserServiceApp.Application.Users.Login;
+using UserServiceApp.Application.Users.LoginWithRefreshToken;
 using UserServiceApp.Contracts.Users;
 
 namespace UserServiceApp.API.Endpoints.Users;

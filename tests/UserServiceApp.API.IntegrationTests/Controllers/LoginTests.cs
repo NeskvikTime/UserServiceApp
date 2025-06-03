@@ -8,7 +8,7 @@ using UserServiceApp.Contracts.Users;
 using UserServiceApp.Domain.Common.Interfaces;
 using UserServiceApp.Domain.UsersAggregate;
 
-namespace UserServiceApp.API.IntegrationTests.Controllers;
+namespace UserServiceApp.API.IntegrationTests.Endpoints;
 
 [Collection("UserCollection")]
 public class LoginAsyncTests : IAsyncLifetime

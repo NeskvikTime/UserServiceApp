@@ -4,7 +4,7 @@ using UserServiceApp.Contracts.Common;
 using UserServiceApp.Contracts.Users;
 using UserServiceApp.Domain.Common.Interfaces;
 
-namespace UserServiceApp.Application.Users.Login;
+namespace UserServiceApp.Application.Users.LoginWithRefreshToken;
 
 public class LoginWithRefreshTokenCommandHandler(
     IJwtTokenGenerator jwtTokenGenerator,

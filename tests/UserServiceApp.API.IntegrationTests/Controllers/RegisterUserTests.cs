@@ -1,14 +1,11 @@
-﻿using Bogus;
-using FluentAssertions;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Json;
+using Bogus;
+using FluentAssertions;
 using UserServiceApp.Contracts.Common;
 using UserServiceApp.Contracts.Users;
-using UserServiceApp.Application.Common.Interfaces;
-using Xunit.Abstractions;
-using Microsoft.VisualStudio.TestPlatform.Utilities;
 
-namespace UserServiceApp.API.IntegrationTests.Controllers;
+namespace UserServiceApp.API.IntegrationTests.Endpoints;
 
 [Collection("UserCollection")]
 public class RegisterUserTests : IAsyncLifetime
@@ -40,7 +37,7 @@ public class RegisterUserTests : IAsyncLifetime
 
     public Task InitializeAsync() => Task.CompletedTask;
 
-    public Task DisposeAsync() => _resetDatabase(); 
+    public Task DisposeAsync() => _resetDatabase();
 
     private string GenerateValidPassword(Faker faker)
     {
@@ -79,7 +76,7 @@ public class RegisterUserTests : IAsyncLifetime
     [Fact]
     public async Task RegisterUser_WithDuplicateEmail_ReturnsBadRequest()
     {
-          var existingUser = _generateRegisterUserRequest();
+        var existingUser = _generateRegisterUserRequest();
         await _httpClient.PostAsJsonAsync(UrlPath, existingUser, CancellationToken.None);
 
         var duplicateEmailRequest = _generateRegisterUserRequest();

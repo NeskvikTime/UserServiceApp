@@ -1,12 +1,11 @@
-﻿using FluentAssertions;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Json;
-using UserServiceApp.Tests.Shared.Common;
-using UserServiceApp.Tests.Shared.Extensions;
+using FluentAssertions;
 using UserServiceApp.Contracts.Common;
 using UserServiceApp.Contracts.Users;
+using UserServiceApp.Tests.Shared.Extensions;
 
-namespace UserServiceApp.API.IntegrationTests.Controllers;
+namespace UserServiceApp.API.IntegrationTests.Endpoints;
 public class DeleteUserTests : BaseIntegrationTest
 {
     public DeleteUserTests(ApplicationApiFactory factory) : base(factory)
