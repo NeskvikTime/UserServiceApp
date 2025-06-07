@@ -1,5 +1,5 @@
 
-name: Build
+name: Build and Unit/Integration Tests
 on:
   workflow_dispatch:
   push:
@@ -11,13 +11,14 @@ env:
   
 jobs:
   build:
+    name: Build and Unit/Integration Tests
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
       
