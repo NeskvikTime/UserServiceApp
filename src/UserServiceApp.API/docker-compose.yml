@@ -1,0 +1,38 @@
+version: '3.9'
+
+volumes:
+  sqldb-data:
+
+networks:
+  app-network:
+    driver: bridge
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: UserServiceAppDB
+    environment:
+      - ACCEPT_EULA=true
+      - MSSQL_SA_PASSWORD=Pass@word
+    ports:
+      - '1433:1433'
+    volumes:
+      - sqldb-data:/var/opt/mssql
+    networks:
+      - app-network
+
+  api:
+    build:
+      context: ..
+      dockerfile: UserServiceApp.API/Dockerfile
+    container_name: UserServiceAppAPI
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__MyDbContext=Server=db,1433;Initial Catalog=UserServiceAppDB;User ID=sa;Password=Pass@word;TrustServerCertificate=True
+    ports:
+      - '8080:8080'
+      - '8081:8081'
+    depends_on:
+      - db
+    networks:
+      - app-network
