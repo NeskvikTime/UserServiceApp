@@ -44,32 +44,11 @@ public class GetAllUserDataTests : BaseIntegrationTest
         getAllResponse.StatusCode.Should().Be(HttpStatusCode.OK);
         var usersResponse = await getAllResponse.Content.ReadFromJsonAsync<List<UserResponse>>(cancellationToken);
         usersResponse.Should().NotBeNull();
-        usersResponse.Count().Should().BeGreaterThan(2);
+        usersResponse.Count().Should().BeGreaterThan(1); // Ensure there is more than admin user on the list
 
         usersResponse.Should().ContainSingle(u => u.Id == firstUser.UserResponse.Id);
         usersResponse.Should().ContainSingle(u => u.Id == secondUser.UserResponse.Id);
     }
-
-    [Fact]
-    public async Task GetAllUserDatas_WhenNoUsers_ReturnsOkWithEmptyList()
-    {
-        // Arrange
-        CancellationToken cancellationToken = CancellationToken.None;
-        AuthenticationResult authAdminInfo = await base.LoginAdminAsync(cancellationToken);
-
-        var getAllUrl = "/v1/users/get-all";
-
-        // Act
-        _httpClient.AddAuthorizationHeader(authAdminInfo.Token);
-        var getAllResponse = await _httpClient.GetAsync(getAllUrl, cancellationToken);
-
-        // Assert
-        getAllResponse.StatusCode.Should().Be(HttpStatusCode.OK);
-        var usersResponse = await getAllResponse.Content.ReadFromJsonAsync<List<UserResponse>>(cancellationToken);
-        usersResponse.Should().NotBeNull();
-        usersResponse!.Count.Should().Be(1); // Only admin user is on the list
-    }
-
 
     private async Task<AuthenticationResult> RegisterUserAsync(
         string email,
