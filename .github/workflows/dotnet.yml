@@ -1,14 +1,14 @@
-name: Build
 
+name: Build
 on:
   workflow_dispatch:
   push:
     branches:
       - main
-
+      
 env:
   DOTNET_VERSION: "9.x"
-
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -22,10 +22,10 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
       
       - name: Restore
-        run: dotnet restore ./UserServiceApp.sln
+        run: dotnet restore ./src/UserServiceApp.sln
       
       - name: Build
-        run: dotnet build ./UserServiceApp.sln --configuration Release --no-restore
+        run: dotnet build ./src/UserServiceApp.sln --configuration Release --no-restore
       
       - name: Test
-        run: dotnet test ./UserServiceApp.sln --configuration Release --no-restore --no-build
+        run: dotnet test ./src/UserServiceApp.sln --configuration Release --no-restore --no-build
