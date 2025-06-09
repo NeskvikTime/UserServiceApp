@@ -7,21 +7,15 @@ using UserServiceApp.Contracts.Users;
 
 namespace UserServiceApp.API.IntegrationTests.Endpoints;
 
-[Collection("UserCollection")]
-public class RegisterUserTests : IAsyncLifetime
+public class RegisterUserTests : BaseIntegrationTest, IAsyncLifetime
 {
     private const string UrlPath = "/v1/users/register";
     private readonly Func<RegisterUserRequest> _generateRegisterUserRequest;
-    private readonly HttpClient _httpClient;
-    private readonly Func<Task> _resetDatabase;
     private readonly ApplicationApiFactory _factory;
 
-    public RegisterUserTests(ApplicationApiFactory factory)
+    public RegisterUserTests(ApplicationApiFactory factory) : base(factory)
     {
         _factory = factory;
-        _httpClient = factory.HttpClient;
-        _resetDatabase = factory.ResetDatabaseAsync;
-
         _generateRegisterUserRequest = () =>
         {
             var faker = new Faker();
@@ -77,7 +71,8 @@ public class RegisterUserTests : IAsyncLifetime
     public async Task RegisterUser_WithDuplicateEmail_ReturnsBadRequest()
     {
         var existingUser = _generateRegisterUserRequest();
-        await _httpClient.PostAsJsonAsync(UrlPath, existingUser, CancellationToken.None);
+        var firstResponse = await _httpClient.PostAsJsonAsync(UrlPath, existingUser, CancellationToken.None);
+        firstResponse.EnsureSuccessStatusCode();
 
         var duplicateEmailRequest = _generateRegisterUserRequest();
         duplicateEmailRequest = duplicateEmailRequest with { Email = existingUser.Email };
