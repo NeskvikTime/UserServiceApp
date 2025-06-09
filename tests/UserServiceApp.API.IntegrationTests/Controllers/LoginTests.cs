@@ -10,43 +10,32 @@ using UserServiceApp.Domain.UsersAggregate;
 
 namespace UserServiceApp.API.IntegrationTests.Endpoints;
 
-[Collection("UserCollection")]
-public class LoginAsyncTests : IAsyncLifetime
+public class LoginAsyncTests : BaseIntegrationTest, IAsyncLifetime
 {
     private const string UrlPath = "/v1/users/login";
 
-    private readonly HttpClient _httpClient;
-    private readonly Func<Task> _resetDatabase;
-
     private readonly IUsersRepository _userRepository;
     private readonly IUnitOfWork _unitOfWork;
-
     private readonly IPasswordHasher _passwordHasher;
-
     private readonly Faker<User> _userFaker;
 
-    public LoginAsyncTests(ApplicationApiFactory applicationApiFactory)
+    public LoginAsyncTests(ApplicationApiFactory factory) : base(factory)
     {
-        _httpClient = applicationApiFactory.HttpClient;
-        _resetDatabase = applicationApiFactory.ResetDatabaseAsync;
-
-        _userRepository = applicationApiFactory.UserRepository;
-        _unitOfWork = applicationApiFactory.UnitOfWork;
-        _passwordHasher = applicationApiFactory.PasswordHasher;
-
+        _userRepository = factory.UserRepository;
+        _unitOfWork = factory.UnitOfWork;
+        _passwordHasher = factory.PasswordHasher;
         _userFaker = new Faker<User>()
-         .CustomInstantiator(f => new User(
-             f.Person.UserName,
-             f.Person.FullName,
-             f.Internet.Email(),
-             f.Phone.PhoneNumber(),
-             f.Random.Word(),
-             f.Locale))
-         .RuleFor(u => u.Id, f => f.Random.Guid());
+            .CustomInstantiator(f => new User(
+                f.Person.UserName,
+                f.Person.FullName,
+                f.Internet.Email(),
+                f.Phone.PhoneNumber(),
+                f.Random.Word(),
+                f.Locale))
+            .RuleFor(u => u.Id, f => f.Random.Guid());
     }
 
     public Task DisposeAsync() => _resetDatabase();
-
     public Task InitializeAsync() => Task.CompletedTask;
 
     [Fact]
@@ -55,25 +44,17 @@ public class LoginAsyncTests : IAsyncLifetime
         // Arrange
         string userPassword = "TestPassword123#";
         string hashedPassword = _passwordHasher.HashPassword(userPassword);
-
         User newUser = _userFaker.Generate();
         newUser.AssignPasswordHash(hashedPassword);
-
         CancellationToken cancellationToken = CancellationToken.None;
-
         await _userRepository.AddAsync(newUser, cancellationToken);
         await _unitOfWork.SaveChangesAsync();
-
         var loginRequest = new LoginRequest(newUser.Email, userPassword);
-
         var newUserFromRepo = await _userRepository.GetByIdAsync(newUser.Id, cancellationToken);
-
         newUserFromRepo.Should().NotBeNull();
         newUserFromRepo.Should().BeEquivalentTo(newUser);
-
         // Act
         var response = await _httpClient.PostAsJsonAsync(UrlPath, loginRequest, cancellationToken);
-
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var userResponse = await response.Content.ReadFromJsonAsync<AuthenticationResult>();
@@ -89,25 +70,17 @@ public class LoginAsyncTests : IAsyncLifetime
         string correctPassword = "TestPassword123#";
         string wrongPassword = "WrongPassword123#";
         string hashedPassword = _passwordHasher.HashPassword(correctPassword);
-
         User newUser = _userFaker.Generate();
         newUser.AssignPasswordHash(hashedPassword);
-
         CancellationToken cancellationToken = CancellationToken.None;
-
         await _userRepository.AddAsync(newUser, cancellationToken);
         await _unitOfWork.SaveChangesAsync();
-
         var loginRequest = new LoginRequest(newUser.Email, wrongPassword);
-
         var newUserFromRepo = await _userRepository.GetByIdAsync(newUser.Id, cancellationToken);
-
         newUserFromRepo.Should().NotBeNull();
         newUserFromRepo.Should().BeEquivalentTo(newUser);
-
         // Act
         var response = await _httpClient.PostAsJsonAsync(UrlPath, loginRequest, cancellationToken);
-
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
@@ -117,10 +90,8 @@ public class LoginAsyncTests : IAsyncLifetime
     {
         // Arrange
         var loginRequest = new LoginRequest("nonexistent@example.com", "AnyPassword123!");
-
         // Act
         var response = await _httpClient.PostAsJsonAsync(UrlPath, loginRequest);
-
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
     }
@@ -130,10 +101,8 @@ public class LoginAsyncTests : IAsyncLifetime
     {
         // Arrange - Example with missing password field
         var loginRequest = new LoginRequest("nonexistent@example.com", string.Empty);
-
         // Act
         var response = await _httpClient.PostAsJsonAsync(UrlPath, loginRequest);
-
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
