@@ -13,11 +13,6 @@ public static class DependencyInjection
 {
     public static IServiceCollection RegisterApiServices(this IServiceCollection services)
     {
-        //services.AddControllers(cfg =>
-        //{
-        //    cfg.Filters.Add(typeof(LogActionParametersFilter));
-        //});
-
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options => options.ConfigureSwaggerGenOptions());
         services.AddAuthorization();
