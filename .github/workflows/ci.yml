@@ -1,33 +1,52 @@
 name: CI
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:
+    branches: [ "main" ]
 
 env:
   DOTNET_VERSION: "9.x"
   
 jobs:
   build:
-    name: CI
+    name: ci
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
       
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-      
-      - name: Restore
-        run: dotnet restore ./src/UserServiceApp.sln
-      
-      - name: Build
-        run: dotnet build ./src/UserServiceApp.sln --configuration Release --no-restore
-      
-      - name: Test
-        run: dotnet test ./src/UserServiceApp.sln --configuration Release --no-restore --no-build
-      - name: Publish
-        run: dotnet publish ./src/UserServiceApp.API/UserServiceApp.API.csproj --configuration Release -o artifacts
+     
+      - name: dotnet test
+        run: dotnet test --configuration Release
+
+      - name: dotnet publish
+        run: dotnet publish .src/UserServiceApp.API/UserServiceApp.API.csproj --configuration Release -o artifacts
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: useserviceapp-artifact
+          path: artifacts/
+
+  deploy_dev:
+    name: Deploy Dev
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+      - name: download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: useserviceapp-artifact
+          path: artifacts/
+
+      - name: "Deploy to Azure Web App"
+        uses: azure/webapps-deploy@v2
+        with:
+            app-name: app-userserviceapp-glebnichyparovich-dev
+            package: artifacts/
+    
