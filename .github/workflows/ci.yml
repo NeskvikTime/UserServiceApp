@@ -24,7 +24,7 @@ jobs:
         run: dotnet test ./src/UserServiceApp.sln --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish .src/UserServiceApp.API/UserServiceApp.API.csproj --configuration Release -o artifacts
+        run: dotnet publish ./src/UserServiceApp.API/UserServiceApp.API.csproj --configuration Release -o artifacts
 
       - name: upload artifact
         uses: actions/upload-artifact@v4

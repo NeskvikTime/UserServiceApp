@@ -25,7 +25,7 @@ public class RegisterUserTests : BaseIntegrationTest, IAsyncLifetime
                 faker.Name.FullName(),
                 faker.Internet.Email(),
                 $"+{faker.Random.Number(1, 9)}{faker.Random.String2(11, "0123456789")}",
-                GenerateValidPassword(faker)
+                Password: "Password-1234!"
             );
         };
     }
