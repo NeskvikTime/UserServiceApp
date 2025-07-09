@@ -24,11 +24,8 @@ builder.Host.UseSerilog((context, configuration)
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "UserServiceApp.Api"));
-}
+app.UseSwagger();
+app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "UserServiceApp.Api"));
 
 app.UseSerilogRequestLogging();
 app.UseMiddleware<LoggingMiddleware>();
