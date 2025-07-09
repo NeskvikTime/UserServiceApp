@@ -21,7 +21,7 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
      
       - name: dotnet test
-        run: dotnet test --configuration Release
+        run: dotnet test ./src/UserServiceApp.sln --configuration Release
 
       - name: dotnet publish
         run: dotnet publish .src/UserServiceApp.API/UserServiceApp.API.csproj --configuration Release -o artifacts
