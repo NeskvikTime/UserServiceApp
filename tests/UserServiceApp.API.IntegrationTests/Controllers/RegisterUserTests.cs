@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
+using System.Text.RegularExpressions;
 using Bogus;
 using FluentAssertions;
 using UserServiceApp.Contracts.Common;
@@ -35,10 +36,16 @@ public class RegisterUserTests : BaseIntegrationTest, IAsyncLifetime
 
     private string GenerateValidPassword(Faker faker)
     {
-        return faker.Internet.Password(9, true, @"[a-z]") // Ensures lowercase
-            + faker.Internet.Password(1, false, @"[A-Z]") // Ensures uppercase
-            + faker.Internet.Password(1, false, @"[0-9]") // Ensures number
-            + faker.Internet.Password(1, false, @"[!@#$%^&*(),.?\"":{}|<>]"); // Ensures symbol
+        string password;
+        var regex = new Regex(@"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
+
+        do
+        {
+            password = faker.Internet.Password(12, false, @"[a-zA-Z0-9#?!@$%^&*-]");
+        }
+        while (!regex.IsMatch(password));
+
+        return password;
     }
 
     [Fact]
