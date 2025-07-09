@@ -1,0 +1,33 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: "9.x"
+  
+jobs:
+  build:
+    name: CI
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      
+      - name: Restore
+        run: dotnet restore ./src/UserServiceApp.sln
+      
+      - name: Build
+        run: dotnet build ./src/UserServiceApp.sln --configuration Release --no-restore
+      
+      - name: Test
+        run: dotnet test ./src/UserServiceApp.sln --configuration Release --no-restore --no-build
+      - name: Publish
+        run: dotnet publish src/UserServiceApp.Api/UserServiceApp.Api.csproj --configuration Release -o artifacts
