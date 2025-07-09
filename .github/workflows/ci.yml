@@ -30,4 +30,4 @@ jobs:
       - name: Test
         run: dotnet test ./src/UserServiceApp.sln --configuration Release --no-restore --no-build
       - name: Publish
-        run: dotnet publish src/UserServiceApp.Api/UserServiceApp.Api.csproj --configuration Release -o artifacts
+        run: dotnet publish ./src/UserServiceApp.Api/UserServiceApp.Api.csproj --configuration Release -o artifacts
