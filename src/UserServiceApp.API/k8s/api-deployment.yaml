@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: userserviceapp-prod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+        - env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: ConnectionStrings__MyDbContext
+              value: Server=db,1433;Initial Catalog=UserServiceAppDB;User ID=sa;Password=Pass@word;TrustServerCertificate=True
+          image: userserviceapp/api:latest
+          imagePullPolicy: Never
+          name: userserviceappapi
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8081
+              protocol: TCP
+              name: api
+      restartPolicy: Always

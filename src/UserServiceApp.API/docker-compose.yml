@@ -1,5 +1,3 @@
-version: '3.9'
-
 volumes:
   sqldb-data:
 
@@ -16,8 +14,8 @@ services:
       - MSSQL_SA_PASSWORD=Pass@word
     ports:
       - '1433:1433'
-    volumes:
-      - sqldb-data:/var/opt/mssql
+    # volumes:
+    #   - sqldb-data:/var/opt/mssql
     networks:
       - app-network
 
